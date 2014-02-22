@@ -37,7 +37,7 @@ gulp.task('example', function () {
 })
 ```
 
-If you just want to execute a bunch of commands only once, starting the stream with `gulp.src('')` should do the trick.
+If you just want to execute a series of commands only once, starting the stream with `gulp.src('')` should do the trick.
 
 Or you can use this shorthand:
 
@@ -48,7 +48,7 @@ gulp.task('shorthand', shell.task([
 ]))
 ```
 
-Note: All the command will be executed in an environment where `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your dependencies.
+Note: All the commands will be executed in an environment where `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
 
 ## API
 
@@ -56,7 +56,7 @@ Note: All the command will be executed in an environment where `PATH` prepended 
 
 #### template
 
-A command can be a [template][] in context of the current [file][].
+A command can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
 
 [template]: http://lodash.com/docs#template
 [file]:     https://github.com/wearefractal/vinyl
@@ -64,6 +64,7 @@ A command can be a [template][] in context of the current [file][].
 #### options.ignoreErrors
 
 type: `Boolean`
+
 default: `false`
 
 By default, it will emit an `error` event when the command finishes unsuccessfully.
@@ -71,6 +72,7 @@ By default, it will emit an `error` event when the command finishes unsuccessful
 #### options.quiet
 
 type: `Boolean`
+
 default: `false`
 
 By default, it will print the command output.
