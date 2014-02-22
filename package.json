@@ -25,17 +25,17 @@
   },
   "homepage": "https://github.com/sun-zheng-an/gulp-shell",
   "devDependencies": {
-    "mocha": "~1.17.1",
-    "should": "~3.1.2",
-    "jshint": "~2.4.4",
-    "istanbul": "~0.2.4",
     "coveralls": "~2.8.0",
-    "mocha-lcov-reporter": "0.0.1"
+    "istanbul": "~0.2.4",
+    "jshint": "~2.4.4",
+    "mocha": "~1.17.1",
+    "mocha-lcov-reporter": "0.0.1",
+    "should": "~3.1.2"
   },
   "dependencies": {
+    "async": "~0.2.10",
     "gulp-util": "~2.2.14",
-    "through2": "~0.4.1",
     "lodash": "~2.4.1",
-    "async": "~0.2.10"
+    "through2": "~0.4.1"
   }
 }
