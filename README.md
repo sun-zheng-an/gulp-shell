@@ -30,29 +30,32 @@ var shell = require('gulp-shell')
 
 gulp.task('example', function () {
   return gulp.src('*.js')
-    .pipe(shell([
-      'echo  <%= file.path %>',
-      'ls -l <%= file.path %>'
-    ]))
+    .pipe(shell('echo <%= file.path %>'))
 })
 ```
 
-If you just want to execute a series of commands only once, starting the stream with `gulp.src('')` should do the trick.
+If you just want to execute the command only once, starting the stream with `gulp.src('')` should do the trick.
 
 Or you can use this shorthand:
 
 ```js
-gulp.task('shorthand', shell.task([
-  'echo hello',
-  'echo world'
-]))
+gulp.task('shorthand', shell.task('echo hello'))
 ```
 
-Note: All the commands will be executed in an environment where `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
+To run multiple commands, join them by `&&` or `;`:
+
+```js
+gulp.task('multiple', shell.task([
+  'echo hello',
+  'echo world'
+].join(' && ')))
+```
+
+Note: The command will be executed in an environment where `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
 
 ## API
 
-### shell(commands, options) or shell.task(commands, options)
+### shell(command, options) or shell.task(command, options)
 
 #### template
 
