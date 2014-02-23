@@ -15,6 +15,10 @@ describe('gulp-shell(commands, options)', function () {
     shell.should.throw('Missing commands')
   })
 
+  it('should be ok when `commands` is a string', function () {
+    shell.bind(null, 'true').should.not.throw()
+  })
+
   it('should pass file through', function (done) {
     var stream = shell(['true'])
 

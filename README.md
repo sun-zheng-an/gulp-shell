@@ -54,7 +54,9 @@ Note: All the commands will be executed in an environment where `PATH` prepended
 
 ### shell(commands, options) or shell.task(commands, options)
 
-#### template
+#### commands
+
+type: `Array` or `String`
 
 A command can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
 
