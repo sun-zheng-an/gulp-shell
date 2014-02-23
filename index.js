@@ -8,6 +8,10 @@ var through = require('through2')
 var PLUGIN_NAME = 'gulp-shell'
 
 function shell(commands, options) {
+  if (typeof commands === 'string') {
+    commands = [commands]
+  }
+
   if (!Array.isArray(commands)) {
     throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
   }
