@@ -4,7 +4,7 @@ var should = require('should')
 
 var shell = require('..')
 
-describe('gulp-shell(command, options)', function () {
+describe('gulp-shell(commands, options)', function () {
   var fakeFile = new gutil.File({
     cwd:  __dirname,
     base: __dirname,
@@ -12,7 +12,7 @@ describe('gulp-shell(command, options)', function () {
   })
 
   it('should pass file through', function (done) {
-    var stream = shell('true')
+    var stream = shell(['true'])
 
     stream.on('data', function (file) {
       should(file).equal(fakeFile)
@@ -23,7 +23,7 @@ describe('gulp-shell(command, options)', function () {
   })
 
   it('should execute command after interpolation', function (done) {
-    var stream = shell('echo <%= file.path %>')
+    var stream = shell(['echo <%= file.path %>'])
 
     var write = process.stdout.write
     process.stdout.write = function (output) {
@@ -36,7 +36,7 @@ describe('gulp-shell(command, options)', function () {
   })
 
   it('should prepend `./node_modules/.bin` to `PATH`', function (done) {
-    var stream = shell('echo $PATH')
+    var stream = shell(['echo $PATH'])
 
     var write = process.stdout.write
     process.stdout.write = function (output) {
@@ -48,9 +48,9 @@ describe('gulp-shell(command, options)', function () {
     stream.write(fakeFile)
   })
 
-  describe('.task(command, options)', function () {
+  describe('.task(commands, options)', function () {
     it('should return a function which returns a stream', function (done) {
-      var task = shell.task('true')
+      var task = shell.task(['true'])
       should(task).be.type('function')
 
       var stream = task()
@@ -63,7 +63,7 @@ describe('gulp-shell(command, options)', function () {
   describe('options', function () {
     describe('ignoreErrors', function () {
       it('should emit error by default', function (done) {
-        var stream = shell('false')
+        var stream = shell(['false'])
 
         stream.on('error', function () {
           done()
@@ -73,7 +73,7 @@ describe('gulp-shell(command, options)', function () {
       })
 
       it('should not emit error when `ignoreErrors` == true', function (done) {
-        var stream = shell('false', {ignoreErrors: true})
+        var stream = shell(['false'], {ignoreErrors: true})
 
         stream.on('error', function () {
           throw new Error()
@@ -89,7 +89,7 @@ describe('gulp-shell(command, options)', function () {
 
     describe('quiet', function () {
       it('should not output anything when `quiet` == true', function (done) {
-        var stream = shell('echo cannot see me!', {quiet: true})
+        var stream = shell(['echo cannot see me!'], {quiet: true})
 
         var write = process.stdout.write
         process.stdout.write = function () {

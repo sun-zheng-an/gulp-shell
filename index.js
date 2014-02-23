@@ -1,4 +1,5 @@
 var _       = require('lodash')
+var async   = require('async')
 var cp      = require('child_process')
 var gutil   = require('gulp-util')
 var join    = require('path').join
@@ -6,7 +7,7 @@ var through = require('through2')
 
 var PLUGIN_NAME = 'gulp-shell'
 
-function shell(command, options) {
+function shell(commands, options) {
   if (!options) options = {}
   var ignoreErrors = !!options.ignoreErrors
   var quiet        = !!options.quiet
@@ -17,27 +18,33 @@ function shell(command, options) {
   var env = _.extend({}, process.env, {PATH: path})
 
   return through.obj(function (file, _, done) {
-    command = gutil.template(command, {file: file})
+    var self = this
 
-    cp.exec(command, {env: env}, function (error, stdout, stderr) {
-      if (!quiet) {
-        if (stderr) gutil.log(stderr.trim())
-        if (stdout) gutil.log(stdout.trim())
-      }
+    async.eachSeries(commands, function (command, done) {
+      command = gutil.template(command, {file: file})
 
-      if (error && !ignoreErrors) {
-        this.emit('error', new gutil.PluginError(PLUGIN_NAME, error))
+      cp.exec(command, {env: env}, function (error, stdout, stderr) {
+        if (!quiet) {
+          if (stderr) gutil.log(stderr.trim())
+          if (stdout) gutil.log(stdout.trim())
+        }
+
+        done(ignoreErrors ? null : error)
+      })
+    }, function (error) {
+      if (error) {
+        self.emit('error', new gutil.PluginError(PLUGIN_NAME, error))
       } else {
-        this.push(file)
+        self.push(file)
       }
       done()
-    }.bind(this))
+    })
   })
 }
 
-shell.task = function (command, options) {
+shell.task = function (commands, options) {
   return function () {
-    var stream = shell(command, options)
+    var stream = shell(commands, options)
 
     stream.write(new gutil.File())
     stream.end()
