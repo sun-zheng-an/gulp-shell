@@ -78,3 +78,11 @@ type: `Boolean`
 default: `false`
 
 By default, it will print the command output.
+
+#### options.cwd
+
+type: `String`
+
+default: Result of `process.cwd()` (as described [here](http://nodejs.org/api/process.html#process_process_cwd))
+
+Sets the current working directory for the command.
