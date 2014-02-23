@@ -11,6 +11,10 @@ describe('gulp-shell(commands, options)', function () {
     path: join(__dirname, 'test-file')
   })
 
+  it('should throw when `commands` is missing', function () {
+    shell.should.throw('Missing commands')
+  })
+
   it('should pass file through', function (done) {
     var stream = shell(['true'])
 
