@@ -8,6 +8,10 @@ var through = require('through2')
 var PLUGIN_NAME = 'gulp-shell'
 
 function shell(commands, options) {
+  if (!Array.isArray(commands)) {
+    throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
+  }
+
   if (!options) options = {}
   var ignoreErrors = !!options.ignoreErrors
   var quiet        = !!options.quiet
