@@ -50,7 +50,7 @@ describe('gulp-shell(commands, options)', function () {
   it('should prepend `./node_modules/.bin` to `PATH`', function (done) {
     var stream = shell(['echo $PATH'])
 
-    shouldOutput(join(__dirname, '..', 'node_modules', '.bin'), done)
+    shouldOutput(join(process.cwd(), 'node_modules/.bin'), done)
 
     stream.write(fakeFile)
   })

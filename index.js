@@ -20,7 +20,7 @@ function shell(commands, options) {
   var ignoreErrors = !!options.ignoreErrors
   var quiet        = !!options.quiet
 
-  var pathToBin = join(__dirname, 'node_modules', '.bin')
+  var pathToBin = join(process.cwd(), 'node_modules/.bin')
   var separator = process.platform.match(/^win/) >= 0 ? ';' : ':'
   var path = pathToBin + separator + process.env.PATH
   var env = _.extend({}, process.env, {PATH: path})
