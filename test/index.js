@@ -113,5 +113,37 @@ describe('gulp-shell(commands, options)', function () {
         stream.write(fakeFile)
       })
     })
+
+    describe('cwd', function () {
+      it('should set the current working directory when `cwd` is a string', function (done) {
+        var stream = shell(['pwd'], {cwd: '..'})
+
+        var write = process.stdout.write
+        process.stdout.write = function (output) {
+          process.stdout.write = write
+          should(output).containEql(join(__dirname, '../..'))
+          should(output).not.containEql(join(__dirname, '..'))
+          done()
+        }
+
+        stream.write(fakeFile)
+      })
+    })
+
+    describe('cwd', function () {
+      it('should use the process current working directory when `cwd` is not passed', function (done) {
+        var stream = shell(['pwd'])
+
+        var write = process.stdout.write
+        process.stdout.write = function (output) {
+          process.stdout.write = write
+          should(output).containEql(join(__dirname, '..'))
+          done()
+        }
+
+        stream.write(fakeFile)
+      })
+    })
+
   })
 })
