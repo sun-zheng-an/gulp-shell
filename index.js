@@ -32,14 +32,14 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       command = gutil.template(command, {file: file})
 
-      cp.exec(command, {env: env, cwd: cwd}, function (error, stdout, stderr) {
-        if (!quiet) {
-          if (stderr) gutil.log(stderr.trim())
-          if (stdout) gutil.log(stdout.trim())
-        }
-
+      var child = cp.exec(command, {env: env, cwd: cwd}, function (error) {
         done(ignoreErrors ? null : error)
       })
+
+      if (!quiet) {
+        child.stdout.pipe(process.stdout)
+        child.stderr.pipe(process.stderr)
+      }
     }, function (error) {
       if (error) {
         self.emit('error', new gutil.PluginError(PLUGIN_NAME, error))
