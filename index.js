@@ -21,7 +21,7 @@ function shell(commands, options) {
   var quiet        = !!options.quiet
 
   var pathToBin = join(process.cwd(), 'node_modules/.bin')
-  var separator = process.platform.match(/^win/) >= 0 ? ';' : ':'
+  var separator = process.platform.match(/^win/) ? ';' : ':'
   var path = pathToBin + separator + process.env.PATH
   var env = _.extend({}, process.env, {PATH: path})
   var cwd = options.cwd || process.cwd()
