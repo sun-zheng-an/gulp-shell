@@ -24,6 +24,7 @@ function shell(commands, options) {
   var separator = process.platform.match(/^win/) >= 0 ? ';' : ':'
   var path = pathToBin + separator + process.env.PATH
   var env = _.extend({}, process.env, {PATH: path})
+  var cwd = options.cwd || process.cwd()
 
   return through.obj(function (file, _, done) {
     var self = this
@@ -31,7 +32,7 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       command = gutil.template(command, {file: file})
 
-      cp.exec(command, {env: env}, function (error, stdout, stderr) {
+      cp.exec(command, {env: env, cwd: cwd}, function (error, stdout, stderr) {
         if (!quiet) {
           if (stderr) gutil.log(stderr.trim())
           if (stdout) gutil.log(stdout.trim())
