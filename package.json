@@ -4,10 +4,8 @@
   "description": "A handy command line interface for gulp",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec -r should && jshint index.js test/*.js",
-    "watch": "mocha -R spec -r should -w",
-    "coverage": "istanbul cover _mocha -- -R spec",
-    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
+    "test": "gulp test lint",
+    "coveralls": "gulp coveralls"
   },
   "repository": {
     "type": "git",
@@ -27,6 +25,7 @@
   "homepage": "https://github.com/sun-zheng-an/gulp-shell",
   "devDependencies": {
     "coveralls": "~2.8.0",
+    "gulp": "~3.5.2",
     "istanbul": "~0.2.4",
     "jshint": "~2.4.4",
     "mocha": "~1.17.1",
