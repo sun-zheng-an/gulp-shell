@@ -4,6 +4,15 @@ var should = require('should')
 
 var shell = require('..')
 
+var originalStdoutWrite = process.stdout.write
+function shouldOutput(expected, done) {
+  process.stdout.write = function (actual) {
+    process.stdout.write = originalStdoutWrite
+    should(actual).containEql(expected)
+    done()
+  }
+}
+
 describe('gulp-shell(commands, options)', function () {
   var fakeFile = new gutil.File({
     cwd:  __dirname,
@@ -33,12 +42,7 @@ describe('gulp-shell(commands, options)', function () {
   it('should execute command after interpolation', function (done) {
     var stream = shell(['echo <%= file.path %>'])
 
-    var write = process.stdout.write
-    process.stdout.write = function (output) {
-      process.stdout.write = write
-      should(output).containEql(fakeFile.path)
-      done()
-    }
+    shouldOutput(fakeFile.path, done)
 
     stream.write(fakeFile)
   })
@@ -46,12 +50,7 @@ describe('gulp-shell(commands, options)', function () {
   it('should prepend `./node_modules/.bin` to `PATH`', function (done) {
     var stream = shell(['echo $PATH'])
 
-    var write = process.stdout.write
-    process.stdout.write = function (output) {
-      process.stdout.write = write
-      should(output).containEql(join(__dirname, '..', 'node_modules', '.bin'))
-      done()
-    }
+    shouldOutput(join(__dirname, '..', 'node_modules', '.bin'), done)
 
     stream.write(fakeFile)
   })
@@ -99,14 +98,10 @@ describe('gulp-shell(commands, options)', function () {
       it('should not output anything when `quiet` == true', function (done) {
         var stream = shell(['echo cannot see me!'], {quiet: true})
 
-        var write = process.stdout.write
-        process.stdout.write = function () {
-          process.stdout.write = write
-          throw new Error()
-        }
+        shouldOutput('this should not match anything!', done)
 
         stream.on('data', function () {
-          process.stdout.write = write
+          process.stdout.write = originalStdoutWrite
           done()
         })
 
@@ -118,13 +113,7 @@ describe('gulp-shell(commands, options)', function () {
       it('should set the current working directory when `cwd` is a string', function (done) {
         var stream = shell(['pwd'], {cwd: '..'})
 
-        var write = process.stdout.write
-        process.stdout.write = function (output) {
-          process.stdout.write = write
-          should(output).containEql(join(__dirname, '../..'))
-          should(output).not.containEql(join(__dirname, '..'))
-          done()
-        }
+        shouldOutput(join(__dirname, '../..'), done)
 
         stream.write(fakeFile)
       })
@@ -134,12 +123,7 @@ describe('gulp-shell(commands, options)', function () {
       it('should use the process current working directory when `cwd` is not passed', function (done) {
         var stream = shell(['pwd'])
 
-        var write = process.stdout.write
-        process.stdout.write = function (output) {
-          process.stdout.write = write
-          should(output).containEql(join(__dirname, '..'))
-          done()
-        }
+        shouldOutput(join(__dirname, '..'), done)
 
         stream.write(fakeFile)
       })
