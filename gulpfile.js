@@ -11,7 +11,10 @@ gulp.task('coverage', ['test'], shell.task('istanbul cover _mocha -- -R spec'))
 
 gulp.task('coveralls', ['coverage'], shell.task('cat coverage/lcov.info | coveralls'))
 
-gulp.task('lint', shell.task('jshint ' + paths.js.join(' ')))
+gulp.task('lint', shell.task([
+  'jshint ' + paths.js.join(' '),
+  'jscs '   + paths.js.join(' '),
+]))
 
 gulp.task('default', ['coverage', 'lint'])
 
