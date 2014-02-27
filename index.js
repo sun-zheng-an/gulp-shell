@@ -16,15 +16,16 @@ function shell(commands, options) {
     throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
   }
 
-  if (!options) options = {}
-  var ignoreErrors = !!options.ignoreErrors
-  var quiet        = !!options.quiet
+  options = _.defaults(options || {}, {
+    ignoreErrors: false,
+    quiet: false,
+    cwd: process.cwd()
+  })
 
   var pathToBin = join(process.cwd(), 'node_modules/.bin')
   var separator = process.platform.match(/^win/) ? ';' : ':'
   var path = pathToBin + separator + process.env.PATH
   var env = _.extend({}, process.env, {PATH: path})
-  var cwd = options.cwd || process.cwd()
 
   return through.obj(function (file, _, done) {
     var self = this
@@ -32,11 +33,11 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       command = gutil.template(command, {file: file})
 
-      var child = cp.exec(command, {env: env, cwd: cwd}, function (error) {
-        done(ignoreErrors ? null : error)
+      var child = cp.exec(command, {env: env, cwd: options.cwd}, function (error) {
+        done(options.ignoreErrors ? null : error)
       })
 
-      if (!quiet) {
+      if (!options.quiet) {
         child.stdout.pipe(process.stdout)
         child.stderr.pipe(process.stderr)
       }
