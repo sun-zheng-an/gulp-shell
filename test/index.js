@@ -8,7 +8,7 @@ var originalStdoutWrite = process.stdout.write
 function shouldOutput(expected, done) {
   process.stdout.write = function (actual) {
     process.stdout.write = originalStdoutWrite
-    should(actual).containEql(expected)
+    should(actual.toLowerCase()).containEql(expected.toLowerCase())
     done()
   }
 }
