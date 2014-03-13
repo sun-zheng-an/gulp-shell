@@ -50,6 +50,10 @@ gulp.task('shorthand', shell.task([
 
 Note: All the commands will be executed in an environment where `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
 
+You can find more examples in the [gulpfile][] of this project.
+
+[gulpfile]: https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js
+
 ## API
 
 ### shell(commands, options) or shell.task(commands, options)
