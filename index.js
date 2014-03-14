@@ -27,7 +27,7 @@ function shell(commands, options) {
   var path = pathToBin + separator + process.env.PATH
   var env = _.extend({}, process.env, {PATH: path})
 
-  return through.obj(function (file, _, done) {
+  return through.obj(function (file, unused, done) {
     var self = this
 
     async.eachSeries(commands, function (command, done) {
