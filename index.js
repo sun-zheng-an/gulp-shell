@@ -25,7 +25,7 @@ function shell(commands, options) {
   var pathToBin = join(process.cwd(), 'node_modules/.bin')
   var separator = process.platform.match(/^win/) ? ';' : ':'
   var path = pathToBin + separator + process.env.PATH
-  var env = _.extend({}, process.env, {PATH: path})
+  var env = _.defaults({PATH: path}, process.env)
 
   return through.obj(function (file, unused, done) {
     var self = this
