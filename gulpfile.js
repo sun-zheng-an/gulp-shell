@@ -19,8 +19,5 @@ gulp.task('lint', shell.task([
 gulp.task('default', ['coverage', 'lint'])
 
 gulp.task('watch', function () {
-  // Keep watch running on errors.
-  gulp.on('err', function () {})
-
   gulp.watch(paths.js, ['default'])
 })
