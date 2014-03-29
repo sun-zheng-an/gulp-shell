@@ -16,11 +16,11 @@ function shell(commands, options) {
     throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
   }
 
-  options = _.defaults(options || {}, {
+  options = _.extend({
     ignoreErrors: false,
     quiet: false,
     cwd: process.cwd()
-  })
+  }, options)
 
   var pathToBin = join(process.cwd(), 'node_modules/.bin')
   var separator = process.platform.match(/^win/) ? ';' : ':'
