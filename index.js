@@ -1,6 +1,6 @@
 var _       = require('lodash')
 var async   = require('async')
-var cp      = require('child_process')
+var exec    = require('child_process').exec
 var gutil   = require('gulp-util')
 var join    = require('path').join
 var through = require('through2')
@@ -33,7 +33,7 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       command = gutil.template(command, {file: file})
 
-      var child = cp.exec(command, {env: env, cwd: options.cwd}, function (error) {
+      var child = exec(command, {env: env, cwd: options.cwd}, function (error) {
         done(options.ignoreErrors ? null : error)
       })
 
