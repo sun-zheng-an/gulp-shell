@@ -29,7 +29,7 @@ var gulp  = require('gulp')
 var shell = require('gulp-shell')
 
 gulp.task('example', function () {
-  return gulp.src('*.js', {read:false})
+  return gulp.src('*.js', {read: false})
     .pipe(shell([
       'echo  <%= file.path %>',
       'ls -l <%= file.path %>'
