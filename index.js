@@ -33,7 +33,15 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       command = gutil.template(command, {file: file})
 
+      var exitHandler = function (code) {
+        if (child) {
+          child.kill()
+        }
+      }
+      process.on('exit', exitHandler)
+
       var child = exec(command, {env: env, cwd: options.cwd, maxBuffer: 16 * 1024 * 1024}, function (error) {
+        process.removeListener('exit', exitHandler)
         done(options.ignoreErrors ? null : error)
       })
 
