@@ -33,7 +33,11 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       command = gutil.template(command, {file: file})
 
-      var child = exec(command, {env: env, cwd: options.cwd, maxBuffer: 16 * 1024 * 1024}, function (error) {
+      var child = exec(command, {
+        env: env,
+        cwd: options.cwd,
+        maxBuffer: 16 * 1024 * 1024
+      }, function (error) {
         done(options.ignoreErrors ? null : error)
       })
 
