@@ -128,6 +128,5 @@ describe('gulp-shell(commands, options)', function () {
         stream.write(fakeFile)
       })
     })
-
   })
 })
