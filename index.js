@@ -38,8 +38,14 @@ function shell(commands, options) {
         cwd: options.cwd,
         maxBuffer: 16 * 1024 * 1024
       }, function (error) {
+        process.stdin.unpipe(child.stdin)
+        process.stdin.resume()
+        process.stdin.pause()
+
         done(options.ignoreErrors ? null : error)
       })
+
+      process.stdin.pipe(child.stdin)
 
       if (!options.quiet) {
         child.stdout.pipe(process.stdout)
