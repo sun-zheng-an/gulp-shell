@@ -39,6 +39,15 @@ describe('gulp-shell(commands, options)', function () {
     stream.write(fakeFile)
   })
 
+  it('should read input', function (done) {
+    var stream = shell(['read s; echo $s'])
+
+    process.stdin.push('something\n')
+    shouldOutput('something', done)
+
+    stream.write(fakeFile)
+  })
+
   it('should execute command after interpolation', function (done) {
     var stream = shell(['echo <%= file.path %>'])
 
