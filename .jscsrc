@@ -29,56 +29,12 @@
   "disallowDanglingUnderscores": true,
   "disallowSpaceAfterObjectKeys": true,
   "requireCommaBeforeLineBreak": true,
-  "requireLeftStickedOperators": [
+  "disallowSpaceBeforeBinaryOperators": [
     ","
   ],
-  "disallowLeftStickedOperators": [
-    "?",
-    "+",
-    "-",
-    "/",
-    "*",
-    "=",
-    "==",
-    "===",
-    "!=",
-    "!==",
-    ">",
-    ">=",
-    "<",
-    "<="
-  ],
-  "requireRightStickedOperators": [
-    "!"
-  ],
-  "disallowRightStickedOperators": [
-    "?",
-    "+",
-    "/",
-    "*",
-    ":",
-    "=",
-    "==",
-    "===",
-    "!=",
-    "!==",
-    ">",
-    ">=",
-    "<",
-    "<="
-  ],
-  "disallowSpaceAfterPrefixUnaryOperators": [
-    "++",
-    "--",
-    "+",
-    "-",
-    "~",
-    "!"
-  ],
-  "disallowSpaceBeforePostfixUnaryOperators": [
-    "++",
-    "--"
-  ],
+  "requireSpacesInConditionalExpression": true,
+  "disallowSpaceAfterPrefixUnaryOperators": true,
+  "disallowSpaceBeforePostfixUnaryOperators": true,
   "requireSpaceBeforeBinaryOperators": [
     "+",
     "-",
@@ -88,7 +44,11 @@
     "==",
     "===",
     "!=",
-    "!=="
+    "!==",
+    ">",
+    ">=",
+    "<",
+    "<="
   ],
   "requireSpaceAfterBinaryOperators": [
     "+",
@@ -99,7 +59,11 @@
     "==",
     "===",
     "!=",
-    "!=="
+    "!==",
+    ">",
+    ">=",
+    "<",
+    "<="
   ],
   "requireCamelCaseOrUpperCaseIdentifiers": true,
   "disallowMultipleLineStrings": true,
