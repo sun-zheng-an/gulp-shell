@@ -90,3 +90,11 @@ type: `String`
 default: [`process.cwd()`](http://nodejs.org/api/process.html#process_process_cwd)
 
 Sets the current working directory for the command.
+
+#### options.maxBuffer
+
+type: `Number`
+
+default: 16MB(16 * 1024 * 1024)
+
+You won't need to set this option unless you encounter a "stdout maxBuffer exceeded" error.

@@ -19,7 +19,8 @@ function shell(commands, options) {
   options = _.extend({
     ignoreErrors: false,
     quiet: false,
-    cwd: process.cwd()
+    cwd: process.cwd(),
+    maxBuffer: 16 * 1024 * 1024
   }, options)
 
   var pathToBin = join(process.cwd(), 'node_modules/.bin')
@@ -36,7 +37,7 @@ function shell(commands, options) {
       var child = exec(command, {
         env: env,
         cwd: options.cwd,
-        maxBuffer: 16 * 1024 * 1024
+        maxBuffer: options.maxBuffer
       }, function (error) {
         process.stdin.removeListener('data', onData)
         process.stdin.pause()
