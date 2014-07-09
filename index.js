@@ -39,17 +39,14 @@ function shell(commands, options) {
         cwd: options.cwd,
         maxBuffer: options.maxBuffer
       }, function (error) {
-        process.stdin.removeListener('data', onData)
+        process.stdin.unpipe(child.stdin)
         process.stdin.pause()
 
         done(options.ignoreErrors ? null : error)
       })
 
-      var onData = function (chunk) {
-        child.stdin.write(chunk)
-      }
-      process.stdin.on('data', onData)
       process.stdin.resume()
+      process.stdin.pipe(child.stdin)
 
       if (!options.quiet) {
         child.stdout.pipe(process.stdout)
