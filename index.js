@@ -28,7 +28,7 @@ function shell(commands, options) {
   var path = pathToBin + separator + process.env.PATH
   var env = _.defaults({PATH: path}, process.env)
 
-  return through.obj(function (file, unused, done) {
+  var stream = through.obj(function (file, unused, done) {
     var self = this
 
     async.eachSeries(commands, function (command, done) {
@@ -61,6 +61,10 @@ function shell(commands, options) {
       done()
     })
   })
+
+  stream.resume()
+
+  return stream
 }
 
 shell.task = function (commands, options) {
