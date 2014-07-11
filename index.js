@@ -2,7 +2,8 @@ var _       = require('lodash')
 var async   = require('async')
 var exec    = require('child_process').exec
 var gutil   = require('gulp-util')
-var join    = require('path').join
+var path    = require('path')
+var join    = path.join
 var through = require('through2')
 
 var PLUGIN_NAME = 'gulp-shell'
@@ -24,7 +25,7 @@ function shell(commands, options) {
   }, options)
 
   var pathToBin = join(process.cwd(), 'node_modules/.bin')
-  var separator = process.platform.match(/^win/) ? ';' : ':'
+  var separator = path.delimiter
   var path = pathToBin + separator + process.env.PATH
   var env = _.defaults({PATH: path}, process.env)
 
