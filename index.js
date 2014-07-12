@@ -1,9 +1,8 @@
-var _       = require('lodash')
-var async   = require('async')
-var exec    = require('child_process').exec
-var gutil   = require('gulp-util')
-var pathMod = require('path')
-var join    = pathMod.join
+var _ = require('lodash')
+var async = require('async')
+var exec = require('child_process').exec
+var gutil = require('gulp-util')
+var path = require('path')
 var through = require('through2')
 
 var PLUGIN_NAME = 'gulp-shell'
@@ -24,10 +23,9 @@ function shell(commands, options) {
     maxBuffer: 16 * 1024 * 1024
   }, options)
 
-  var pathToBin = join(process.cwd(), 'node_modules/.bin')
-  var separator = pathMod.delimiter
-  var path = pathToBin + separator + process.env.PATH
-  var env = _.defaults({PATH: path}, process.env)
+  var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
+  var PATH = pathToBin + path.delimiter + process.env.PATH
+  var env = _.defaults({PATH: PATH}, process.env)
 
   var stream = through.obj(function (file, unused, done) {
     var self = this
