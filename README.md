@@ -31,9 +31,15 @@ var shell = require('gulp-shell')
 gulp.task('example', function () {
   return gulp.src('*.js', {read: false})
     .pipe(shell([
-      'echo  <%= file.path %>',
+      'echo <%= f(file.path) %>',
       'ls -l <%= file.path %>'
-    ]))
+    ], {
+      templateData: {
+        f: function (s) {
+          return s.replace(/$/, '.bak')
+        }
+      }
+    }))
 })
 ```
 
@@ -90,6 +96,12 @@ type: `String`
 default: [`process.cwd()`](http://nodejs.org/api/process.html#process_process_cwd)
 
 Sets the current working directory for the command.
+
+#### options.templateData
+
+type: `Object`
+
+The data that can be accessed in template.
 
 #### options.maxBuffer
 
