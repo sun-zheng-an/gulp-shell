@@ -31,7 +31,8 @@ function shell(commands, options) {
     var self = this
 
     async.eachSeries(commands, function (command, done) {
-      command = gutil.template(command, {file: file})
+      var context = _.extend({file: file}, options.templateData)
+      command = gutil.template(command, context)
 
       var child = exec(command, {
         env: env,
