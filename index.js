@@ -38,7 +38,7 @@ function shell(commands, options) {
         env: env,
         cwd: options.cwd,
         maxBuffer: options.maxBuffer
-      }, function (error) {
+      }, function (error, stdout) {
         process.stdin.unpipe(child.stdin)
         process.stdin.pause()
 
