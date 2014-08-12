@@ -38,16 +38,14 @@ function shell(commands, options) {
         env: env,
         cwd: options.cwd,
         maxBuffer: options.maxBuffer
-      }, function (error, stdout, stderr) {
+      }, function (error) {
         process.stdin.unpipe(child.stdin)
         process.stdin.pause()
 
-        if (error && !options.ignoreErrors) {
-          error.stdout = stdout
-          error.stderr = stderr
-        }
-
-        done(options.ignoreErrors ? null : error)
+        done({
+          error: error,
+          stdout: stdout
+        })
       })
 
       process.stdin.resume()
@@ -57,13 +55,14 @@ function shell(commands, options) {
         child.stdout.pipe(process.stdout)
         child.stderr.pipe(process.stderr)
       }
-    }, function (error) {
-      if (error) {
-        self.emit('error', new gutil.PluginError(PLUGIN_NAME, error, {
-          stdout: error.stdout,
-          stderr: error.stderr
+    }, function (message) {
+      if (!options.ignoreErrors && message.error) {
+        self.emit('error', new gutil.PluginError(PLUGIN_NAME, message.error, {
+          stdout: message.stdout,
         }))
       } else {
+        file.error = message.error
+        file.stdout = message.stdout
         self.push(file)
       }
       done()
