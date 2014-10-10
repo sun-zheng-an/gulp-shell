@@ -54,8 +54,6 @@ gulp.task('shorthand', shell.task([
 ]))
 ```
 
-Note: All the commands will be executed in an environment where `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
-
 You can find more examples in the [gulpfile][] of this project.
 
 [gulpfile]: https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js
@@ -115,6 +113,4 @@ You won't need to set this option unless you encounter a "stdout maxBuffer excee
 
 type: `Object`
 
-default: [`process.env`](http://nodejs.org/api/process.html#process_process_env) with /node_modules/.bin folder added as PATH
-
-An object containing the user environment to be used along with defined command executions.
+default: [`process.env`](http://nodejs.org/api/process.html#process_process_env) with `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
