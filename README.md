@@ -110,3 +110,11 @@ type: `Number`
 default: 16MB(16 * 1024 * 1024)
 
 You won't need to set this option unless you encounter a "stdout maxBuffer exceeded" error.
+
+#### options.env
+
+type: `Object`
+
+default: [`process.env`](http://nodejs.org/api/process.html#process_process_env) with /node_modules/.bin folder added as PATH
+
+An object containing the user environment to be used along with defined command executions.
