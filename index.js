@@ -40,6 +40,7 @@ function shell(commands, options) {
         maxBuffer: options.maxBuffer
       }, function (error, stdout, stderr) {
         process.stdin.unpipe(child.stdin)
+        process.stdin.resume()
         process.stdin.pause()
 
         if (error && !options.ignoreErrors) {
