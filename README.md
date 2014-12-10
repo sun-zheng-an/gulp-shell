@@ -121,4 +121,4 @@ type: `Boolean`
 
 default: false
 
-Whether to clear system environonment variables or not. If true, only those in options.env are used.
+Whether to clear the current environment or not before adding the variables in options.env.
