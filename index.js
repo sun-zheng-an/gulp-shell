@@ -19,11 +19,19 @@ function shell(commands, options) {
   var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
   var PATH = pathToBin + path.delimiter + process.env.PATH
 
+  var clearEnv = options.hasOwnProperty('clearEnv') ? options['clearEnv'] : false;
+
+  var env = clearEnv ? {} : _.defaults({PATH: PATH}, process.env);
+
+  if (options.env) {
+    options.env = _.extend(env, options.env)
+  }
+
   options = _.extend({
     ignoreErrors: false,
     quiet: false,
     cwd: process.cwd(),
-    env: _.defaults({PATH: PATH}, process.env),
+    env: env,
     maxBuffer: 16 * 1024 * 1024
   }, options)
 
