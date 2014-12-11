@@ -23,7 +23,7 @@ function shell(commands, options) {
 
   var env = clearEnv ? {} : _.defaults({PATH: PATH}, process.env);
 
-  if (options.env) {
+  if (options && options.env) {
     options.env = _.extend(env, options.env)
   }
 
