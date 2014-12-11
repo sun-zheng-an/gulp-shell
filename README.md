@@ -114,3 +114,11 @@ You won't need to set this option unless you encounter a "stdout maxBuffer excee
 type: `Object`
 
 default: [`process.env`](http://nodejs.org/api/process.html#process_process_env) with `PATH` prepended by `./node_modules/.bin`, allowing you to run executables in your Node's dependencies.
+
+#### options.clearEnv
+
+type: `Boolean`
+
+default: false
+
+Whether to clear the current environment or not before adding the variables in options.env.
