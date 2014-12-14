@@ -16,16 +16,16 @@ function shell(commands, options) {
     throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
   }
 
-  var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
-  var PATH = pathToBin + path.delimiter + process.env.PATH
-
   options = _.extend({
     ignoreErrors: false,
     quiet: false,
     cwd: process.cwd(),
-    env: _.defaults({PATH: PATH}, process.env),
     maxBuffer: 16 * 1024 * 1024
   }, options)
+
+  var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
+  var PATH = pathToBin + path.delimiter + process.env.PATH
+  options.env = _.extend({}, process.env, {PATH: PATH}, options.env)
 
   var stream = through.obj(function (file, unused, done) {
     var self = this
