@@ -110,35 +110,6 @@ describe('gulp-shell(commands, options)', function () {
     })
 
     describe('errorMessage', function () {
-      it('should override the default message', function (done) {
-        var errorMessage = 'Command failed: '
-        var changedMessage = 'foo'
-        var stream1 = shell(['false'])
-        var stream2 = shell(['false'], {errorMessage: changedMessage})
-        var otherStreamDone = false
-
-        function reallyDone () {
-          if (otherStreamDone) {
-            done()
-          } else {
-            otherStreamDone = true
-          }
-        }
-
-        stream1.on('error', function (error) {
-          error.message.should.equal(errorMessage)
-          reallyDone()
-        })
-
-        stream2.on('error', function (error) {
-          error.message.should.equal(changedMessage)
-          reallyDone()
-        })
-
-        stream1.write(fakeFile)
-        stream2.write(fakeFile)
-      })
-
       it('should allow for custom messages', function (done) {
         var errorMessage = 'foo'
         var stream = shell(['false'], {errorMessage: errorMessage})
