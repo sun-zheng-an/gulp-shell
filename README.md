@@ -71,6 +71,14 @@ A command can be a [template][] which can be interpolated by some [file][] info 
 [template]: http://lodash.com/docs#template
 [file]:     https://github.com/wearefractal/vinyl
 
+#### options.errorMessage
+
+type: `String`
+
+You can add a custom error message for when the command fails.  This can be a [template][] which can be interpolated with some [file][] info (e.g. `file.path`) and some [error][] info (e.g. `error.code`).
+
+[error]: http://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
+
 #### options.ignoreErrors
 
 type: `Boolean`
