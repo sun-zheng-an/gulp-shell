@@ -41,12 +41,12 @@ function shell(commands, options) {
         maxBuffer: options.maxBuffer
       }, function (error, stdout, stderr) {
         if (error && !options.ignoreErrors) {
+          error.stdout = stdout
+          error.stderr = stderr
           if (options.errorMessage) {
             var errorContext = _.extend({file: file, error: error}, options.templateData)
             error.message = gutil.template(options.errorMessage, errorContext)
           }
-          error.stdout = stdout
-          error.stderr = stderr
         }
 
         done(options.ignoreErrors ? null : error)
