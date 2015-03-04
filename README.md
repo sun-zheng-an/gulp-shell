@@ -95,6 +95,24 @@ default: `false`
 
 By default, it will print the command output.
 
+#### options.showErrorProperties
+
+type: `Boolean`
+
+default: `true`
+
+When the command exits with an error, a `new PluginError(pluginName, message[, options])` will be bubbled up to gulp. However, most command tools(e.g. `mocha`) have a self-sufficient logging system. The command itself will print the error, and then gulp will reprint that error again with a complex format.
+
+You can use `options` like this to bypass the complexity:
+
+    {
+        quiet: true,                             // turn off the cmd error logging
+        errorMessage: "\n<%= error.stdout %>",   // reprint the cmd error in the `Message` of the gulp plugin error logging
+        showErrorProperties: false               // turn off the `Detail` of the gulp plugin error logging
+    }
+
+`showErrorProperties` works as an alias of the `showProperties` option of gulp-utils `PluginError`.  For more information, checkout the [gulp-utils](https://github.com/gulpjs/gulp-util#new-pluginerrorpluginname-message-options).
+
 #### options.cwd
 
 type: `String`
