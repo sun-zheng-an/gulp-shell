@@ -18,6 +18,7 @@ function shell(commands, options) {
 
   options = _.extend({
     ignoreErrors: false,
+    errorMessage: '',
     quiet: false,
     cwd: process.cwd(),
     maxBuffer: 16 * 1024 * 1024
@@ -42,6 +43,10 @@ function shell(commands, options) {
         if (error && !options.ignoreErrors) {
           error.stdout = stdout
           error.stderr = stderr
+          if (options.errorMessage) {
+            var errorContext = _.extend({file: file, error: error}, options.templateData)
+            error.message = gutil.template(options.errorMessage, errorContext)
+          }
         }
 
         done(options.ignoreErrors ? null : error)
