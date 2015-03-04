@@ -109,6 +109,19 @@ describe('gulp-shell(commands, options)', function () {
       })
     })
 
+    describe('showErrorProperties', function () {
+      it('should bubble up the option `showErrorProperties` to gulp on error', function (done) {
+        var stream = shell(['false'], {showErrorProperties: false})
+
+        stream.on('error', function (pluginError) {
+          should(pluginError.showProperties).equal(false)
+          done()
+        })
+
+        stream.write(fakeFile)
+      })
+    })
+
     describe('errorMessage', function () {
       it('should allow for custom messages', function (done) {
         var errorMessage = 'foo'

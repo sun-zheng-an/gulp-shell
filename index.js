@@ -20,6 +20,7 @@ function shell(commands, options) {
     ignoreErrors: false,
     errorMessage: '',
     quiet: false,
+    showErrorProperties: true,
     cwd: process.cwd(),
     maxBuffer: 16 * 1024 * 1024
   }, options)
@@ -60,7 +61,8 @@ function shell(commands, options) {
       if (error) {
         self.emit('error', new gutil.PluginError(PLUGIN_NAME, error, {
           stdout: error.stdout,
-          stderr: error.stderr
+          stderr: error.stderr,
+          showProperties: options.showErrorProperties
         }))
       } else {
         self.push(file)
