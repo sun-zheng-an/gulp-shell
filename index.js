@@ -18,7 +18,7 @@ function shell(commands, options) {
 
   options = _.extend({
     ignoreErrors: false,
-    errorMessage: '',
+    errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>',
     quiet: false,
     cwd: process.cwd(),
     maxBuffer: 16 * 1024 * 1024
@@ -43,10 +43,14 @@ function shell(commands, options) {
         if (error && !options.ignoreErrors) {
           error.stdout = stdout
           error.stderr = stderr
-          if (options.errorMessage) {
-            var errorContext = _.extend({file: file, error: error}, options.templateData)
-            error.message = gutil.template(options.errorMessage, errorContext)
-          }
+
+          var errorContext = _.extend({
+            command: command,
+            file: file,
+            error: error
+          }, options.templateData)
+
+          error.message = gutil.template(options.errorMessage, errorContext)
         }
 
         done(options.ignoreErrors ? null : error)
@@ -58,9 +62,9 @@ function shell(commands, options) {
       }
     }, function (error) {
       if (error) {
-        self.emit('error', new gutil.PluginError(PLUGIN_NAME, error, {
-          stdout: error.stdout,
-          stderr: error.stderr
+        self.emit('error', new gutil.PluginError({
+          plugin: PLUGIN_NAME,
+          message: error.message
         }))
       } else {
         self.push(file)
