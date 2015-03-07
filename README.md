@@ -75,7 +75,10 @@ A command can be a [template][] which can be interpolated by some [file][] info 
 
 type: `String`
 
-You can add a custom error message for when the command fails.  This can be a [template][] which can be interpolated with some [file][] info (e.g. `file.path`) and some [error][] info (e.g. `error.code`).
+default: ``Command `<%= command %>` failed with exit code <%= error.code %>``
+
+You can add a custom error message for when the command fails.
+This can be a [template][] which can be interpolated with the current `command`, some [file][] info (e.g. `file.path`) and some [error][] info (e.g. `error.code`).
 
 [error]: http://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
 
