@@ -2,15 +2,15 @@
 
 var gutil = require('gulp-util')
 var join = require('path').join
-var should = require('should')
+var expect = require('chai').expect
 
 var shell = require('..')
 
 var originalStdoutWrite = process.stdout.write
-function shouldOutput(expected, done) {
+function expectToOutput(expected, done) {
   process.stdout.write = function (actual) {
     process.stdout.write = originalStdoutWrite
-    should(actual.toLowerCase()).containEql(expected.toLowerCase())
+    expect(actual.toLowerCase()).to.include(expected.toLowerCase())
     done()
   }
 }
@@ -22,45 +22,45 @@ describe('gulp-shell(commands, options)', function () {
     path: join(__dirname, 'test-file')
   })
 
-  it('should throw when `commands` is missing', function () {
-    shell.should.throw('Missing commands')
+  it('throws when `commands` is missing', function () {
+    expect(shell).to.throw('Missing commands')
   })
 
-  it('should be ok when `commands` is a string', function () {
-    shell.bind(null, 'true').should.not.throw()
+  it('works when `commands` is a string', function () {
+    expect(shell.bind(null, 'true')).to.not.throw()
   })
 
-  it('should pass file through', function (done) {
+  it('passes file through', function (done) {
     var stream = shell(['true'])
 
     stream.on('data', function (file) {
-      should(file).equal(fakeFile)
+      expect(file).to.equal(fakeFile)
       done()
     })
 
     stream.write(fakeFile)
   })
 
-  it('should execute command after interpolation', function (done) {
+  it('executes command after interpolation', function (done) {
     var stream = shell(['echo <%= file.path %>'])
 
-    shouldOutput(fakeFile.path, done)
+    expectToOutput(fakeFile.path, done)
 
     stream.write(fakeFile)
   })
 
-  it('should prepend `./node_modules/.bin` to `PATH`', function (done) {
+  it('prepends `./node_modules/.bin` to `PATH`', function (done) {
     var stream = shell(['echo $PATH'])
 
-    shouldOutput(join(process.cwd(), 'node_modules/.bin'), done)
+    expectToOutput(join(process.cwd(), 'node_modules/.bin'), done)
 
     stream.write(fakeFile)
   })
 
   describe('.task(commands, options)', function () {
-    it('should return a function which returns a stream', function (done) {
+    it('returns a function which returns a stream', function (done) {
       var task = shell.task(['true'])
-      should(task).be.type('function')
+      expect(task).to.be.a('function')
 
       var stream = task()
       stream.on('data', function () {
@@ -71,7 +71,7 @@ describe('gulp-shell(commands, options)', function () {
 
   describe('options', function () {
     describe('ignoreErrors', function () {
-      it('should emit error by default', function (done) {
+      it('emits error by default', function (done) {
         var stream = shell(['false'])
 
         stream.on('error', function () {
@@ -81,7 +81,7 @@ describe('gulp-shell(commands, options)', function () {
         stream.write(fakeFile)
       })
 
-      it('should not emit error when `ignoreErrors` == true', function (done) {
+      it("won't emit error when `ignoreErrors` == true", function (done) {
         var stream = shell(['false'], {ignoreErrors: true})
 
         stream.on('error', function () {
@@ -97,10 +97,10 @@ describe('gulp-shell(commands, options)', function () {
     })
 
     describe('quiet', function () {
-      it('should not output anything when `quiet` == true', function (done) {
+      it("won't output anything when `quiet` == true", function (done) {
         var stream = shell(['echo cannot see me!'], {quiet: true})
 
-        shouldOutput('this should not match anything!', done)
+        expectToOutput('this should not match anything!', done)
 
         stream.on('data', function () {
           process.stdout.write = originalStdoutWrite
@@ -112,25 +112,25 @@ describe('gulp-shell(commands, options)', function () {
     })
 
     describe('errorMessage', function () {
-      it('should allow for custom messages', function (done) {
+      it('allows for custom messages', function (done) {
         var errorMessage = 'foo'
         var stream = shell(['false'], {errorMessage: errorMessage})
 
         stream.on('error', function (error) {
-          error.message.should.equal(errorMessage)
+          expect(error.message).to.equal(errorMessage)
           done()
         })
 
         stream.write(fakeFile)
       })
 
-      it('should include the error object in the error context', function (done) {
+      it('includes the error object in the error context', function (done) {
         var errorMessage = 'Foo <%= error.code %>'
         var expectedMessage = 'Foo 2'
         var stream = shell(['exit 2'], {errorMessage: errorMessage})
 
         stream.on('error', function (error) {
-          error.message.should.equal(expectedMessage)
+          expect(error.message).to.equal(expectedMessage)
           done()
         })
 
@@ -139,20 +139,20 @@ describe('gulp-shell(commands, options)', function () {
     })
 
     describe('cwd', function () {
-      it('should set the current working directory when `cwd` is a string', function (done) {
+      it('sets the current working directory when `cwd` is a string', function (done) {
         var stream = shell(['pwd'], {cwd: '..'})
 
-        shouldOutput(join(__dirname, '../..'), done)
+        expectToOutput(join(__dirname, '../..'), done)
 
         stream.write(fakeFile)
       })
     })
 
     describe('cwd', function () {
-      it('should use the process current working directory when `cwd` is not passed', function (done) {
+      it('uses the process current working directory when `cwd` is not passed', function (done) {
         var stream = shell(['pwd'])
 
-        shouldOutput(join(__dirname, '..'), done)
+        expectToOutput(join(__dirname, '..'), done)
 
         stream.write(fakeFile)
       })
