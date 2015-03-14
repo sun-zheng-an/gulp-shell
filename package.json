@@ -25,10 +25,9 @@
   "homepage": "https://github.com/sun-zheng-an/gulp-shell",
   "devDependencies": {
     "coveralls": "~2.11.2",
+    "eslint": "~0.16.2",
     "gulp": "~3.8.11",
     "istanbul": "~0.3.7",
-    "jscs": "~1.11.3",
-    "jshint": "~2.6.3",
     "mocha": "~2.2.1",
     "mocha-lcov-reporter": "0.0.2",
     "should": "~5.1.0"
