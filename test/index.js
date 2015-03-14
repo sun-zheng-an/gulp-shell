@@ -1,5 +1,5 @@
-var gutil  = require('gulp-util')
-var join   = require('path').join
+var gutil = require('gulp-util')
+var join = require('path').join
 var should = require('should')
 
 var shell = require('..')
@@ -15,7 +15,7 @@ function shouldOutput(expected, done) {
 
 describe('gulp-shell(commands, options)', function () {
   var fakeFile = new gutil.File({
-    cwd:  __dirname,
+    cwd: __dirname,
     base: __dirname,
     path: join(__dirname, 'test-file')
   })
@@ -86,7 +86,7 @@ describe('gulp-shell(commands, options)', function () {
           throw new Error()
         })
 
-        stream.on('data',  function () {
+        stream.on('data', function () {
           done()
         })
 
