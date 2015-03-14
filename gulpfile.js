@@ -5,7 +5,7 @@ var paths = {
   js: ['*.js', 'test/*.js']
 }
 
-gulp.task('test', shell.task('mocha -R spec -r should'))
+gulp.task('test', shell.task('mocha -R spec'))
 
 gulp.task('coverage', ['test'], shell.task('istanbul cover _mocha -- -R spec'))
 
