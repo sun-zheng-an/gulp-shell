@@ -6,7 +6,7 @@ rules:
   strict: 0
   no-shadow: 0
   indent: [2, 2]
-  brace-style: 2
+  brace-style: [2, 1tbs, {allowSingleLine: true}]
   comma-style: 2
   func-style: [2, declaration]
   operator-assignment: [2, always]
