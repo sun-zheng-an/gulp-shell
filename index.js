@@ -40,6 +40,10 @@ function shell(commands, options) {
         cwd: options.cwd,
         maxBuffer: options.maxBuffer
       }, function (error, stdout, stderr) {
+        process.stdin.unpipe(child.stdin)
+        process.stdin.resume()
+        process.stdin.pause()
+
         if (error && !options.ignoreErrors) {
           error.stdout = stdout
           error.stderr = stderr
@@ -55,6 +59,10 @@ function shell(commands, options) {
 
         done(options.ignoreErrors ? null : error)
       })
+
+      process.stdin.resume()
+      process.stdin.setEncoding('utf8')
+      process.stdin.pipe(child.stdin)
 
       if (!options.quiet) {
         child.stdout.pipe(process.stdout)
