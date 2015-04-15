@@ -65,6 +65,7 @@ function shell(commands, options) {
       process.stdin.pipe(child.stdin)
 
       if (!options.quiet) {
+        process.stdin.pipe(child.stdin)
         child.stdout.pipe(process.stdout)
         child.stderr.pipe(process.stderr)
       }
