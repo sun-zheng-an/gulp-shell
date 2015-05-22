@@ -38,7 +38,8 @@ function shell(commands, options) {
       var child = exec(command, {
         env: options.env,
         cwd: options.cwd,
-        maxBuffer: options.maxBuffer
+        maxBuffer: options.maxBuffer,
+        timeout: options.timeout
       }, function (error, stdout, stderr) {
         process.stdin.unpipe(child.stdin)
         process.stdin.resume()
