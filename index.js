@@ -37,7 +37,7 @@ function shell(commands, options) {
 
       var child = exec(command, {
         env: options.env,
-        cwd: options.cwd,
+        cwd: gutil.template(options.cwd, context),
         maxBuffer: options.maxBuffer
       }, function (error, stdout, stderr) {
         process.stdin.unpipe(child.stdin)
