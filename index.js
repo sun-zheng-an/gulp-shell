@@ -26,7 +26,7 @@ function shell(commands, options) {
 
   var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
   var PATH = pathToBin + path.delimiter + process.env.PATH
-  var pathKey = _.findKey(process.env, function(val, key){return key.toLowerCase() === 'path'}) || 'PATH'
+  var pathKey = _.findKey(process.env, function(val, key) { return key.toLowerCase() === 'path' }) || 'PATH'
   options.env = _.extend({}, process.env, options.env)
   options.env[pathKey] = PATH
 
