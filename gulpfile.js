@@ -2,7 +2,7 @@ var gulp = require('gulp')
 var shell = require('./')
 
 var paths = {
-  js: ['*.js', 'test/*.js']
+  js: ['index.js', 'test/index.js']
 }
 
 gulp.task('test', shell.task('mocha -R spec'))
