@@ -26,7 +26,9 @@ function shell(commands, options) {
 
   var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
   var PATH = pathToBin + path.delimiter + process.env.PATH
-  options.env = _.extend({}, process.env, {PATH: PATH}, options.env)
+  var pathKey = _.findKey(process.env, function(val, key){return key.toLowerCase() === 'path'}) || 'PATH'
+  options.env = _.extend({}, process.env, options.env)
+  options.env[pathKey] = PATH
 
   var stream = through.obj(function (file, unused, done) {
     var self = this
