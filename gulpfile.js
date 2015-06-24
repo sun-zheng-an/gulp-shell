@@ -20,9 +20,9 @@ gulp.task('watch', function () {
 })
 
 var isWin = /^win/.test(process.platform)
-var goodSlash = isWin ? '\\' : '/'
-var badSlash = isWin ? /\//g : /\\/g
-var slashCommand = './node_modules/.bin/gulp lint'.replace(badSlash, goodSlash)
+var badSlash = isWin ? '/' : '\\'
+var goodSlash = isWin ? /\\/g : /\//g
+var slashCommand = './node_modules/.bin/gulp lint'.replace(goodSlash, badSlash)
 
 gulp.task('slash-test', shell.task(
   slashCommand
