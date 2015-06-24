@@ -16,6 +16,14 @@ function shell(commands, options) {
     throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
   }
 
+  var isWin = /^win/.test(process.platform)
+  var goodSlash = isWin ? '\\' : '/'
+  var badSlash = isWin ? /\//g : /\\/g
+
+  commands = commands.map(function (command) {
+    return command.replace(badSlash, goodSlash)
+  })
+
   options = _.extend({
     ignoreErrors: false,
     errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>',
