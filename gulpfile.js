@@ -18,3 +18,12 @@ gulp.task('default', ['coverage', 'lint'])
 gulp.task('watch', function () {
   gulp.watch(paths.js, ['default'])
 })
+
+var isWin = /^win/.test(process.platform)
+var goodSlash = isWin ? '\\' : '/'
+var badSlash = isWin ? /\//g : /\\/g
+var slashCommand = './node_modules/.bin/gulp lint'.replace(badSlash, goodSlash)
+
+gulp.task('slash-test', shell.task(
+  slashCommand
+))
