@@ -103,6 +103,18 @@ describe('gulp-shell(commands, options)', function () {
 
         stream.write(fakeFile)
       })
+
+      it('prepends aditional arguments to `shell`', function (done) {
+        var stream = shell(['works'], {shellArgs: 'echo'})
+
+        stream.on('error', function () {
+          throw new Error()
+        })
+
+        expectToOutput('works', done)
+
+        stream.write(fakeFile)
+      })
     })
 
     describe('quiet', function () {

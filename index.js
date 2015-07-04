@@ -25,7 +25,8 @@ function shell(commands, options) {
   }, options)
 
   var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
-  var pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
+  var windows = /^win/.test(process.platform)
+  var pathName = windows ? 'Path' : 'PATH'
   var newPath = pathToBin + path.delimiter + process.env[pathName]
   options.env = _.extend(process.env, _.object([[pathName, newPath]]), options.env)
 
@@ -36,11 +37,21 @@ function shell(commands, options) {
       var context = _.extend({file: file}, options.templateData)
       command = gutil.template(command, context)
 
-      var child = exec(command, {
+      var shellArgs = options.shellArgs ? options.shellArgs + ' ' : ''
+      var shell = options.shell
+
+      // If we are in windows trying to run cygwin shell we should run the shell as argument of the cmd shell.
+      if (windows && /^(ba)?sh$/.test(shell)) {
+        shellArgs = shell + ' -c ' + shellArgs
+        shell = undefined
+      }
+
+      var child = exec(shellArgs + command, {
         env: options.env,
         cwd: options.cwd,
         maxBuffer: options.maxBuffer,
-        timeout: options.timeout
+        timeout: options.timeout,
+        shell: shell
       }, function (error, stdout, stderr) {
         process.stdin.unpipe(child.stdin)
         process.stdin.resume()

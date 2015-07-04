@@ -137,3 +137,15 @@ By default, all the commands will be executed in an environment with all the var
 You can override any environment variables with this option.
 
 For example, setting it to `{PATH: process.env.PATH}` will reset the `PATH` if the default one brings your some troubles.
+
+#### options.shell
+
+type: `String`
+
+String Shell to execute the command with (Default: '/bin/sh' on UNIX, 'cmd.exe' on Windows, The shell should understand the -c switch on UNIX or /s /c on Windows. Although, on windows environments with cygwin available you can set this to `bash` or `sh` and gulp-shell will invoke them with `-c` parameter instead.
+
+#### options.shellArgs
+
+type: `String`
+
+Additional parameters to pass to the shell prior to the command to execute (i.e. `/Q` in windows to turn the echo off or '--debug' in linux).
