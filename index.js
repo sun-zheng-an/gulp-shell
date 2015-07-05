@@ -24,7 +24,7 @@ function shell(commands, options) {
     maxBuffer: 16 * 1024 * 1024
   }, options)
 
-  var pathToBin = path.join(process.cwd(), 'node_modules/.bin')
+  var pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
   var pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
   var newPath = pathToBin + path.delimiter + process.env[pathName]
   options.env = _.extend(process.env, _.object([[pathName, newPath]]), options.env)
