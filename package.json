@@ -35,7 +35,7 @@
   "dependencies": {
     "async": "~1.2.0",
     "gulp-util": "~3.0.5",
-    "lodash": "~3.9.3",
+    "lodash": "^3.9.3",
     "through2": "~0.6.5"
   }
 }
