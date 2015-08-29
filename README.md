@@ -4,15 +4,17 @@
 [![Build Status][travis-image]][travis-url]
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![Dependency Status][david-dm-image]][david-dm-url]
+[![Downloads][downloads-image]][npm-url]
 
-[npm-url]:         https://badge.fury.io/js/gulp-shell
-[npm-image]:       https://badge.fury.io/js/gulp-shell.png
+[npm-url]:         https://npmjs.org/package/gulp-shell
+[npm-image]:       https://img.shields.io/npm/v/gulp-shell.svg
 [travis-url]:      https://travis-ci.org/sun-zheng-an/gulp-shell
-[travis-image]:    https://travis-ci.org/sun-zheng-an/gulp-shell.png?branch=master
+[travis-image]:    https://img.shields.io/travis/sun-zheng-an/gulp-shell/master.svg
 [coveralls-url]:   https://coveralls.io/r/sun-zheng-an/gulp-shell
-[coveralls-image]: https://coveralls.io/repos/sun-zheng-an/gulp-shell/badge.png?branch=master
+[coveralls-image]: https://img.shields.io/coveralls/sun-zheng-an/gulp-shell/master.svg
 [david-dm-url]:    https://david-dm.org/sun-zheng-an/gulp-shell
-[david-dm-image]:  https://david-dm.org/sun-zheng-an/gulp-shell.png?theme=shields.io
+[david-dm-image]:  https://img.shields.io/david/sun-zheng-an/gulp-shell.svg
+[downloads-image]: https://img.shields.io/npm/dm/gulp-shell.svg
 
 > A handy command line interface for gulp
 
