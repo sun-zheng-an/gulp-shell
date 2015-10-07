@@ -100,6 +100,14 @@ default: `false`
 
 By default, it will print the command output.
 
+#### options.interactive
+
+type: `Boolean`
+
+default: `false`
+
+Turn it on only if you need to run some interactive commands.
+
 #### options.cwd
 
 type: `String`
