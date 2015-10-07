@@ -20,6 +20,7 @@ function shell(commands, options) {
     ignoreErrors: false,
     errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>',
     quiet: false,
+    interactive: false,
     cwd: process.cwd(),
     maxBuffer: 16 * 1024 * 1024
   }, options)
@@ -42,9 +43,11 @@ function shell(commands, options) {
         maxBuffer: options.maxBuffer,
         timeout: options.timeout
       }, function (error, stdout, stderr) {
-        process.stdin.unpipe(child.stdin)
-        process.stdin.resume()
-        process.stdin.pause()
+        if (options.interactive) {
+          process.stdin.unpipe(child.stdin)
+          process.stdin.resume()
+          process.stdin.pause()
+        }
 
         if (error && !options.ignoreErrors) {
           error.stdout = stdout
@@ -62,9 +65,11 @@ function shell(commands, options) {
         done(options.ignoreErrors ? null : error)
       })
 
-      process.stdin.resume()
-      process.stdin.setEncoding('utf8')
-      process.stdin.pipe(child.stdin)
+      if (options.interactive) {
+        process.stdin.resume()
+        process.stdin.setEncoding('utf8')
+        process.stdin.pipe(child.stdin)
+      }
 
       if (!options.quiet) {
         child.stdout.pipe(process.stdout)

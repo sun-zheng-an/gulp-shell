@@ -41,15 +41,6 @@ describe('gulp-shell(commands, options)', function () {
     stream.write(fakeFile)
   })
 
-  it('reads input', function (done) {
-    var stream = shell(['read s; echo $s'])
-
-    process.stdin.push('something\n')
-    expectToOutput('something', done)
-
-    stream.write(fakeFile)
-  })
-
   it('executes command after interpolation', function (done) {
     var stream = shell(['echo <%= file.path %>'])
 
@@ -115,6 +106,17 @@ describe('gulp-shell(commands, options)', function () {
           process.stdout.write = originalStdoutWrite
           done()
         })
+
+        stream.write(fakeFile)
+      })
+    })
+
+    describe('interactive', function () {
+      it('reads input when `interactive` == true', function (done) {
+        var stream = shell(['read s; echo $s'], {interactive: true})
+
+        process.stdin.push('something\n')
+        expectToOutput('something', done)
 
         stream.write(fakeFile)
       })
