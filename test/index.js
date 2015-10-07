@@ -157,9 +157,7 @@ describe('gulp-shell(commands, options)', function () {
 
         stream.write(fakeFile)
       })
-    })
 
-    describe('cwd', function () {
       it('uses the process current working directory when `cwd` is not passed', function (done) {
         var stream = shell(['pwd'])
 
