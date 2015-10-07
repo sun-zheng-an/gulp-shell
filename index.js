@@ -17,6 +17,7 @@ function shell(commands, options) {
   }
 
   options = _.extend({
+    verbose: false,
     ignoreErrors: false,
     errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>',
     quiet: false,
@@ -36,6 +37,10 @@ function shell(commands, options) {
     async.eachSeries(commands, function (command, done) {
       var context = _.extend({file: file}, options.templateData)
       command = gutil.template(command, context)
+
+      if (options.verbose) {
+        gutil.log(gutil.colors.blue(command))
+      }
 
       var child = exec(command, {
         env: options.env,
