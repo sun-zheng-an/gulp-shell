@@ -5,9 +5,9 @@ var paths = {
   js: ['*.js', 'test/*.js']
 }
 
-gulp.task('test', shell.task('mocha'))
+gulp.task('test', shell.task('mocha -c'))
 
-gulp.task('coverage', ['test'], shell.task('istanbul cover _mocha'))
+gulp.task('coverage', ['test'], shell.task('istanbul cover _mocha -- -c'))
 
 gulp.task('coveralls', ['coverage'], shell.task('cat coverage/lcov.info | coveralls'))
 
