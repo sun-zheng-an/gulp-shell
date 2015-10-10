@@ -73,6 +73,14 @@ A command can be a [template][] which can be interpolated by some [file][] info 
 [template]: http://lodash.com/docs#template
 [file]:     https://github.com/wearefractal/vinyl
 
+#### options.verbose
+
+type: `Boolean`
+
+default: `false`
+
+Set to `true` to print the command(s) to stdout as they are executed
+
 #### options.errorMessage
 
 type: `String`
