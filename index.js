@@ -7,7 +7,7 @@ var through = require('through2')
 
 var PLUGIN_NAME = 'gulp-shell'
 
-function shell(commands, options) {
+function normalizeCommands(commands) {
   if (typeof commands === 'string') {
     commands = [commands]
   }
@@ -16,6 +16,10 @@ function shell(commands, options) {
     throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
   }
 
+  return commands
+}
+
+function normalizeOptions(options) {
   options = _.extend({
     verbose: false,
     ignoreErrors: false,
@@ -31,56 +35,67 @@ function shell(commands, options) {
   var newPath = pathToBin + path.delimiter + process.env[pathName]
   options.env = _.extend(process.env, _.object([[pathName, newPath]]), options.env)
 
+  return options
+}
+
+function runCommands(commands, options, file, done) {
+  async.eachSeries(commands, function (command, done) {
+    var context = _.extend({file: file}, options.templateData)
+    command = gutil.template(command, context)
+
+    if (options.verbose) {
+      gutil.log(gutil.colors.cyan(command))
+    }
+
+    var child = exec(command, {
+      env: options.env,
+      cwd: options.cwd,
+      maxBuffer: options.maxBuffer,
+      timeout: options.timeout
+    }, function (error, stdout, stderr) {
+      if (options.interactive) {
+        process.stdin.unpipe(child.stdin)
+        process.stdin.resume()
+        process.stdin.pause()
+      }
+
+      if (error && !options.ignoreErrors) {
+        error.stdout = stdout
+        error.stderr = stderr
+
+        var errorContext = _.extend({
+          command: command,
+          file: file,
+          error: error
+        }, options.templateData)
+
+        error.message = gutil.template(options.errorMessage, errorContext)
+      }
+
+      done(options.ignoreErrors ? null : error)
+    })
+
+    if (options.interactive) {
+      process.stdin.resume()
+      process.stdin.setEncoding('utf8')
+      process.stdin.pipe(child.stdin)
+    }
+
+    if (!options.quiet) {
+      child.stdout.pipe(process.stdout)
+      child.stderr.pipe(process.stderr)
+    }
+  }, done)
+}
+
+function shell(commands, options) {
+  commands = normalizeCommands(commands)
+  options = normalizeOptions(options)
+
   var stream = through.obj(function (file, unused, done) {
     var self = this
 
-    async.eachSeries(commands, function (command, done) {
-      var context = _.extend({file: file}, options.templateData)
-      command = gutil.template(command, context)
-
-      if (options.verbose) {
-        gutil.log(gutil.colors.blue(command))
-      }
-
-      var child = exec(command, {
-        env: options.env,
-        cwd: options.cwd,
-        maxBuffer: options.maxBuffer,
-        timeout: options.timeout
-      }, function (error, stdout, stderr) {
-        if (options.interactive) {
-          process.stdin.unpipe(child.stdin)
-          process.stdin.resume()
-          process.stdin.pause()
-        }
-
-        if (error && !options.ignoreErrors) {
-          error.stdout = stdout
-          error.stderr = stderr
-
-          var errorContext = _.extend({
-            command: command,
-            file: file,
-            error: error
-          }, options.templateData)
-
-          error.message = gutil.template(options.errorMessage, errorContext)
-        }
-
-        done(options.ignoreErrors ? null : error)
-      })
-
-      if (options.interactive) {
-        process.stdin.resume()
-        process.stdin.setEncoding('utf8')
-        process.stdin.pipe(child.stdin)
-      }
-
-      if (!options.quiet) {
-        child.stdout.pipe(process.stdout)
-        child.stderr.pipe(process.stderr)
-      }
-    }, function (error) {
+    runCommands(commands, options, file, function (error) {
       if (error) {
         self.emit('error', new gutil.PluginError({
           plugin: PLUGIN_NAME,
@@ -99,13 +114,8 @@ function shell(commands, options) {
 }
 
 shell.task = function (commands, options) {
-  return function () {
-    var stream = shell(commands, options)
-
-    stream.write(new gutil.File())
-    stream.end()
-
-    return stream
+  return function (done) {
+    runCommands(normalizeCommands(commands), normalizeOptions(options), null, done)
   }
 }
 

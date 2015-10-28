@@ -45,7 +45,7 @@ gulp.task('example', function () {
 })
 ```
 
-If you just want to execute a series of commands only once, starting the stream with `gulp.src('')` should do the trick.
+If you just want to execute a series of commands only once, ~~starting the stream with `gulp.src('')`~~ should do the trick. However, [this is an anti-pattern](https://github.com/sun-zheng-an/gulp-shell/issues/55), and **it won't work in `gulp 4.0`** .
 
 Or you can use this shorthand:
 

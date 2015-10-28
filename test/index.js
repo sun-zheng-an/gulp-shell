@@ -58,14 +58,13 @@ describe('gulp-shell(commands, options)', function () {
   })
 
   describe('.task(commands, options)', function () {
-    it('returns a function which returns a stream', function (done) {
-      var task = shell.task(['true'])
-      expect(task).to.be.a('function')
+    it('returns a function which returns a callback', function (done) {
+      var task = shell.task(['echo hello world'])
 
-      var stream = task()
-      stream.on('data', function () {
-        done()
-      })
+      expect(task).to.be.a('function')
+      expectToOutput('hello world', done)
+
+      task()
     })
   })
 
