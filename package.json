@@ -1,6 +1,6 @@
 {
   "name": "gulp-shell",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A handy command line interface for gulp",
   "main": "index.js",
   "scripts": {
@@ -24,17 +24,17 @@
   },
   "homepage": "https://github.com/sun-zheng-an/gulp-shell",
   "devDependencies": {
-    "chai": "~3.3.0",
-    "coveralls": "~2.11.2",
-    "eslint": "~1.6.0",
+    "chai": "~3.4.0",
+    "coveralls": "~2.11.4",
+    "eslint": "~1.7.3",
     "gulp": "~3.9.0",
-    "istanbul": "~0.3.14",
+    "istanbul": "~0.4.0",
     "mocha": "~2.3.3",
-    "mocha-lcov-reporter": "1.0.0"
+    "mocha-lcov-reporter": "~1.0.0"
   },
   "dependencies": {
-    "async": "~1.4.2",
-    "gulp-util": "~3.0.5",
+    "async": "~1.5.0",
+    "gulp-util": "~3.0.7",
     "lodash": "~3.10.1",
     "through2": "~2.0.0"
   }
