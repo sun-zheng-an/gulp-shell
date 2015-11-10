@@ -42,6 +42,7 @@ function runCommands(commands, options, file, done) {
   async.eachSeries(commands, function (command, done) {
     var context = _.extend({file: file}, options.templateData)
     command = gutil.template(command, context)
+    cwd = gutil.template(options.cwd, context)
 
     if (options.verbose) {
       gutil.log(gutil.colors.cyan(command))
@@ -49,7 +50,7 @@ function runCommands(commands, options, file, done) {
 
     var child = exec(command, {
       env: options.env,
-      cwd: options.cwd,
+      cwd: cwd,
       maxBuffer: options.maxBuffer,
       timeout: options.timeout
     }, function (error, stdout, stderr) {
