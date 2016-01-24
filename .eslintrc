@@ -4,13 +4,12 @@ env:
   node: true
 
 rules:
-  wrap-iife: 2
-  strict: 0
-  no-shadow: 0
-  indent: [2, 2]
   brace-style: [2, 1tbs, {allowSingleLine: true}]
   comma-style: 2
+  camelcase: [2, {properties: never}]
   func-style: [2, declaration]
+  indent: [2, 2]
+  no-shadow: 0
   operator-assignment: [2, always]
   padded-blocks: [2, never]
   quote-props: [2, as-needed]
@@ -21,3 +20,5 @@ rules:
   space-before-function-paren: [2, {anonymous: always, named: never}]
   space-in-parens: [2, never]
   space-unary-ops: [2, {words: true, nonwords: false}]
+  strict: 0
+  wrap-iife: 2
