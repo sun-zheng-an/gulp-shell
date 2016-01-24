@@ -49,7 +49,7 @@ function runCommands(commands, options, file, done) {
 
     var child = exec(command, {
       env: options.env,
-      cwd: options.cwd,
+      cwd: gutil.template(options.cwd, context),
       maxBuffer: options.maxBuffer,
       timeout: options.timeout
     }, function (error, stdout, stderr) {
