@@ -33,7 +33,7 @@ function normalizeOptions(options) {
   var pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
   var pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
   var newPath = pathToBin + path.delimiter + process.env[pathName]
-  options.env = _.extend(process.env, _.object([[pathName, newPath]]), options.env)
+  options.env = _.extend(process.env, _.zipObject([[pathName, newPath]]), options.env)
 
   return options
 }
