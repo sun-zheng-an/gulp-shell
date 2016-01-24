@@ -122,7 +122,9 @@ type: `String`
 
 default: [`process.cwd()`](http://nodejs.org/api/process.html#process_process_cwd)
 
-Sets the current working directory for the command.
+Sets the current working directory for the command. This can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
+
+[template]: http://lodash.com/docs#template
 
 #### options.templateData
 
