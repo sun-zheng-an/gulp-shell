@@ -1,6 +1,6 @@
 {
   "name": "gulp-shell",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A handy command line interface for gulp",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "devDependencies": {
     "chai": "~3.4.0",
     "coveralls": "~2.11.4",
-    "eslint": "~1.7.3",
+    "eslint": "~1.10.3",
     "gulp": "~3.9.0",
     "istanbul": "~0.4.0",
     "mocha": "~2.3.3",
