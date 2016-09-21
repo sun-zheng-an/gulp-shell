@@ -140,6 +140,8 @@ default: 16MB(16 * 1024 * 1024)
 
 You won't need to set this option unless you encounter a "stdout maxBuffer exceeded" error.
 
+For example, setting it to `16 * 1024 * 1024` will result in 16MB.
+
 #### options.timeout
 
 type: `Number`
