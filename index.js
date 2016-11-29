@@ -35,12 +35,17 @@ function normalizeOptions(options) {
   var newPath = pathToBin + path.delimiter + process.env[pathName]
   options.env = _.extend(process.env, _.fromPairs([[pathName, newPath]]), options.env)
 
-  return options
+  // HACK: remove duplicate environment variables when start from npm scripts.
+  options.env = _.pickBy(options, function (value, key) {
+    return !_.startsWith(_.lowerCase(key), 'npm_')
+  });
+
+  return options;
 }
 
 function runCommands(commands, options, file, done) {
   async.eachSeries(commands, function (command, done) {
-    var context = _.extend({file: file}, options.templateData)
+    var context = _.extend({ file: file }, options.templateData)
     command = gutil.template(command, context)
 
     if (options.verbose) {
