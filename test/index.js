@@ -69,6 +69,38 @@ describe('gulp-shell(commands, options)', function () {
   })
 
   describe('options', function () {
+    describe('cwd', function () {
+      it('sets the current working directory when `cwd` is a string', function (done) {
+        var stream = shell([
+          'test $PWD = ' + join(__dirname, '../..')
+        ], {cwd: '..'})
+
+        expectToBeOk(stream, done)
+
+        stream.write(fakeFile)
+      })
+
+      it('uses the process current working directory when `cwd` is not passed', function (done) {
+        var stream = shell([
+          'test $PWD = ' + join(__dirname, '..')
+        ])
+
+        expectToBeOk(stream, done)
+
+        stream.write(fakeFile)
+      })
+    })
+
+    describe('quiet', function () {
+      it("won't output anything when `quiet` == true", function (done) {
+        var stream = shell(['echo cannot see me!'], {quiet: true})
+
+        expectToBeOk(stream, done)
+
+        stream.write(fakeFile)
+      })
+    })
+
     describe('ignoreErrors', function () {
       it('emits error by default', function (done) {
         var stream = shell(['false'])
@@ -90,16 +122,6 @@ describe('gulp-shell(commands, options)', function () {
         stream.on('data', function () {
           done()
         })
-
-        stream.write(fakeFile)
-      })
-    })
-
-    describe('quiet', function () {
-      it("won't output anything when `quiet` == true", function (done) {
-        var stream = shell(['echo cannot see me!'], {quiet: true})
-
-        expectToBeOk(stream, done)
 
         stream.write(fakeFile)
       })
@@ -127,28 +149,6 @@ describe('gulp-shell(commands, options)', function () {
           expect(error.message).to.equal(expectedMessage)
           done()
         })
-
-        stream.write(fakeFile)
-      })
-    })
-
-    describe('cwd', function () {
-      it('sets the current working directory when `cwd` is a string', function (done) {
-        var stream = shell([
-          'test $PWD = ' + join(__dirname, '../..')
-        ], {cwd: '..'})
-
-        expectToBeOk(stream, done)
-
-        stream.write(fakeFile)
-      })
-
-      it('uses the process current working directory when `cwd` is not passed', function (done) {
-        var stream = shell([
-          'test $PWD = ' + join(__dirname, '..')
-        ])
-
-        expectToBeOk(stream, done)
 
         stream.write(fakeFile)
       })
