@@ -22,6 +22,7 @@ function normalizeCommands (commands) {
 function normalizeOptions (options) {
   options = _.extend({
     cwd: process.cwd(),
+    shell: true,
     quiet: false,
     verbose: false,
     ignoreErrors: false,
@@ -48,7 +49,7 @@ function runCommands (commands, options, file, done) {
     var child = spawn(command, {
       env: options.env,
       cwd: gutil.template(options.cwd, context),
-      shell: true,
+      shell: options.shell,
       stdio: options.quiet ? 'ignore' : 'inherit'
     })
 
