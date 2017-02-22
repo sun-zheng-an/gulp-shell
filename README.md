@@ -91,6 +91,14 @@ You can override any environment variables with this option.
 
 For example, setting it to `{PATH: process.env.PATH}` will reset the `PATH` if the default one brings your some troubles.
 
+#### options.shell
+
+type: `String`
+
+default: `/bin/sh` on UNIX, and `cmd.exe` on Windows
+
+Change it to `bash` if you like.
+
 #### options.quiet
 
 type: `Boolean`

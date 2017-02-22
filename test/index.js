@@ -51,7 +51,7 @@ describe('gulp-shell(commands, options)', function () {
   it('prepends `./node_modules/.bin` to `PATH`', function (done) {
     var stream = shell([
       'echo $PATH | grep -q "' + join(process.cwd(), 'node_modules/.bin') + '"'
-    ])
+    ], {shell: 'bash'})
 
     expectToBeOk(stream, done)
 
@@ -84,6 +84,18 @@ describe('gulp-shell(commands, options)', function () {
         var stream = shell([
           'test $PWD = ' + join(__dirname, '..')
         ])
+
+        expectToBeOk(stream, done)
+
+        stream.write(fakeFile)
+      })
+    })
+
+    describe('shell', function () {
+      it('changes the shell', function (done) {
+        var stream = shell([
+          '[[ $0 = bash ]]'
+        ], {shell: 'bash'})
 
         expectToBeOk(stream, done)
 
