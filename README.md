@@ -91,9 +91,7 @@ type: `String`
 default: ``Command `<%= command %>` failed with exit code <%= error.code %>``
 
 You can add a custom error message for when the command fails.
-This can be a [template][] which can be interpolated with the current `command`, some [file][] info (e.g. `file.path`) and some [error][] info (e.g. `error.code`).
-
-[error]: http://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
+This can be a [template][] which can be interpolated with the current `command`, some [file][] info (e.g. `file.path`) and some error info (e.g. `error.code`).
 
 #### options.ignoreErrors
 
@@ -111,14 +109,6 @@ default: `false`
 
 By default, it will print the command output.
 
-#### options.interactive
-
-type: `Boolean`
-
-default: `false`
-
-Turn it on only if you need to run some interactive commands.
-
 #### options.cwd
 
 type: `String`
@@ -134,24 +124,6 @@ Sets the current working directory for the command. This can be a [template][] w
 type: `Object`
 
 The data that can be accessed in template.
-
-#### options.maxBuffer
-
-type: `Number`
-
-default: 16MB(16 * 1024 * 1024)
-
-You won't need to set this option unless you encounter a "stdout maxBuffer exceeded" error.
-
-For example, setting it to `16 * 1024 * 1024` will result in 16MB.
-
-#### options.timeout
-
-type: `Number`
-
-default: undefined (no timeout)
-
-The maximum amount of time in milliseconds the process is allowed to run.
 
 #### options.env
 

@@ -1,8 +1,8 @@
 var _ = require('lodash')
 var async = require('async')
-var exec = require('child_process').exec
 var gutil = require('gulp-util')
 var path = require('path')
+var spawn = require('child_process').spawn
 var through = require('through2')
 
 var PLUGIN_NAME = 'gulp-shell'
@@ -25,9 +25,7 @@ function normalizeOptions (options) {
     ignoreErrors: false,
     errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>',
     quiet: false,
-    interactive: false,
-    cwd: process.cwd(),
-    maxBuffer: 16 * 1024 * 1024
+    cwd: process.cwd()
   }, options)
 
   var pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
@@ -47,44 +45,28 @@ function runCommands (commands, options, file, done) {
       gutil.log(gutil.colors.cyan(command))
     }
 
-    var child = exec(command, {
+    var child = spawn(command, {
       env: options.env,
       cwd: gutil.template(options.cwd, context),
-      maxBuffer: options.maxBuffer,
-      timeout: options.timeout
-    }, function (error, stdout, stderr) {
-      if (options.interactive) {
-        process.stdin.unpipe(child.stdin)
-        process.stdin.resume()
-        process.stdin.pause()
-      }
-
-      if (error && !options.ignoreErrors) {
-        error.stdout = stdout
-        error.stderr = stderr
-
-        var errorContext = _.extend({
-          command: command,
-          file: file,
-          error: error
-        }, options.templateData)
-
-        error.message = gutil.template(options.errorMessage, errorContext)
-      }
-
-      done(options.ignoreErrors ? null : error)
+      shell: true,
+      stdio: options.quiet ? 'ignore' : 'inherit'
     })
 
-    if (options.interactive) {
-      process.stdin.resume()
-      process.stdin.setEncoding('utf8')
-      process.stdin.pipe(child.stdin)
-    }
+    child.on('exit', function (code) {
+      if (code === 0 || options.ignoreErrors) {
+        return done()
+      }
 
-    if (!options.quiet) {
-      child.stdout.pipe(process.stdout)
-      child.stderr.pipe(process.stderr)
-    }
+      var context = _.extend({
+        command: command,
+        file: file,
+        error: {code: code}
+      }, options.templateData)
+
+      var message = gutil.template(options.errorMessage, context)
+
+      done(new gutil.PluginError(PLUGIN_NAME, message))
+    })
   }, done)
 }
 
@@ -97,10 +79,7 @@ function shell (commands, options) {
 
     runCommands(commands, options, file, function (error) {
       if (error) {
-        self.emit('error', new gutil.PluginError({
-          plugin: PLUGIN_NAME,
-          message: error.message
-        }))
+        self.emit('error', error)
       } else {
         self.push(file)
       }

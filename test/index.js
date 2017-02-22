@@ -6,13 +6,10 @@ var expect = require('chai').expect
 
 var shell = require('..')
 
-var originalStdoutWrite = process.stdout.write
-function expectToOutput (expected, done) {
-  process.stdout.write = function (actual) {
-    process.stdout.write = originalStdoutWrite
-    expect(actual.toLowerCase()).to.include(expected.toLowerCase())
-    done()
-  }
+function expectToBeOk (stream, done) {
+  stream
+  .on('error', done)
+  .on('data', function () { done() })
 }
 
 describe('gulp-shell(commands, options)', function () {
@@ -42,17 +39,21 @@ describe('gulp-shell(commands, options)', function () {
   })
 
   it('executes command after interpolation', function (done) {
-    var stream = shell(['echo <%= file.path %>'])
+    var stream = shell([
+      'test <%= file.path %> = ' + fakeFile.path
+    ])
 
-    expectToOutput(fakeFile.path, done)
+    expectToBeOk(stream, done)
 
     stream.write(fakeFile)
   })
 
   it('prepends `./node_modules/.bin` to `PATH`', function (done) {
-    var stream = shell(['echo $PATH'])
+    var stream = shell([
+      'echo $PATH | grep -q "' + join(process.cwd(), 'node_modules/.bin') + '"'
+    ])
 
-    expectToOutput(join(process.cwd(), 'node_modules/.bin'), done)
+    expectToBeOk(stream, done)
 
     stream.write(fakeFile)
   })
@@ -62,9 +63,8 @@ describe('gulp-shell(commands, options)', function () {
       var task = shell.task(['echo hello world'])
 
       expect(task).to.be.a('function')
-      expectToOutput('hello world', done)
 
-      task()
+      task(done)
     })
   })
 
@@ -99,23 +99,7 @@ describe('gulp-shell(commands, options)', function () {
       it("won't output anything when `quiet` == true", function (done) {
         var stream = shell(['echo cannot see me!'], {quiet: true})
 
-        expectToOutput('this should not match anything!', done)
-
-        stream.on('data', function () {
-          process.stdout.write = originalStdoutWrite
-          done()
-        })
-
-        stream.write(fakeFile)
-      })
-    })
-
-    describe('interactive', function () {
-      it('reads input when `interactive` == true', function (done) {
-        var stream = shell(['read s; echo $s'], {interactive: true})
-
-        process.stdin.push('something\n')
-        expectToOutput('something', done)
+        expectToBeOk(stream, done)
 
         stream.write(fakeFile)
       })
@@ -150,17 +134,21 @@ describe('gulp-shell(commands, options)', function () {
 
     describe('cwd', function () {
       it('sets the current working directory when `cwd` is a string', function (done) {
-        var stream = shell(['pwd'], {cwd: '..'})
+        var stream = shell([
+          'test $PWD = ' + join(__dirname, '../..')
+        ], {cwd: '..'})
 
-        expectToOutput(join(__dirname, '../..'), done)
+        expectToBeOk(stream, done)
 
         stream.write(fakeFile)
       })
 
       it('uses the process current working directory when `cwd` is not passed', function (done) {
-        var stream = shell(['pwd'])
+        var stream = shell([
+          'test $PWD = ' + join(__dirname, '..')
+        ])
 
-        expectToOutput(join(__dirname, '..'), done)
+        expectToBeOk(stream, done)
 
         stream.write(fakeFile)
       })
