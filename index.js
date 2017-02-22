@@ -7,7 +7,7 @@ var through = require('through2')
 
 var PLUGIN_NAME = 'gulp-shell'
 
-function normalizeCommands(commands) {
+function normalizeCommands (commands) {
   if (typeof commands === 'string') {
     commands = [commands]
   }
@@ -19,7 +19,7 @@ function normalizeCommands(commands) {
   return commands
 }
 
-function normalizeOptions(options) {
+function normalizeOptions (options) {
   options = _.extend({
     verbose: false,
     ignoreErrors: false,
@@ -38,7 +38,7 @@ function normalizeOptions(options) {
   return options
 }
 
-function runCommands(commands, options, file, done) {
+function runCommands (commands, options, file, done) {
   async.eachSeries(commands, function (command, done) {
     var context = _.extend({file: file}, options.templateData)
     command = gutil.template(command, context)
@@ -88,11 +88,11 @@ function runCommands(commands, options, file, done) {
   }, done)
 }
 
-function shell(commands, options) {
+function shell (commands, options) {
   commands = normalizeCommands(commands)
   options = normalizeOptions(options)
 
-  var stream = through.obj(function (file, unused, done) {
+  var stream = through.obj(function (file, _encoding, done) {
     var self = this
 
     runCommands(commands, options, file, function (error) {

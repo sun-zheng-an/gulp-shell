@@ -1,6 +1,7 @@
 # gulp-shell
 
 [![NPM version][npm-image]][npm-url]
+[![Standard - JavaScript Style Guide][standard-image]][standard-url]
 [![Build Status][travis-image]][travis-url]
 [![Coveralls Status][coveralls-image]][coveralls-url]
 [![Dependency Status][david-dm-image]][david-dm-url]
@@ -8,6 +9,8 @@
 
 [npm-url]:         https://npmjs.org/package/gulp-shell
 [npm-image]:       https://img.shields.io/npm/v/gulp-shell.svg
+[standard-image]:  https://img.shields.io/badge/code_style-standard-brightgreen.svg
+[standard-url]:    http://standardjs.com/
 [travis-url]:      https://travis-ci.org/sun-zheng-an/gulp-shell
 [travis-image]:    https://img.shields.io/travis/sun-zheng-an/gulp-shell/master.svg
 [coveralls-url]:   https://coveralls.io/r/sun-zheng-an/gulp-shell

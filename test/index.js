@@ -1,4 +1,4 @@
-/*eslint-env mocha */
+/* eslint-env mocha */
 
 var gutil = require('gulp-util')
 var join = require('path').join
@@ -7,7 +7,7 @@ var expect = require('chai').expect
 var shell = require('..')
 
 var originalStdoutWrite = process.stdout.write
-function expectToOutput(expected, done) {
+function expectToOutput (expected, done) {
   process.stdout.write = function (actual) {
     process.stdout.write = originalStdoutWrite
     expect(actual.toLowerCase()).to.include(expected.toLowerCase())
