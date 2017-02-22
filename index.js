@@ -21,11 +21,11 @@ function normalizeCommands (commands) {
 
 function normalizeOptions (options) {
   options = _.extend({
+    cwd: process.cwd(),
+    quiet: false,
     verbose: false,
     ignoreErrors: false,
-    errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>',
-    quiet: false,
-    cwd: process.cwd()
+    errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>'
   }, options)
 
   var pathToBin = path.join(process.cwd(), 'node_modules', '.bin')

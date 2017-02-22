@@ -73,42 +73,6 @@ type: `Array` or `String`
 
 A command can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
 
-[template]: http://lodash.com/docs#template
-[file]:     https://github.com/wearefractal/vinyl
-
-#### options.verbose
-
-type: `Boolean`
-
-default: `false`
-
-Set to `true` to print the command(s) to stdout as they are executed
-
-#### options.errorMessage
-
-type: `String`
-
-default: ``Command `<%= command %>` failed with exit code <%= error.code %>``
-
-You can add a custom error message for when the command fails.
-This can be a [template][] which can be interpolated with the current `command`, some [file][] info (e.g. `file.path`) and some error info (e.g. `error.code`).
-
-#### options.ignoreErrors
-
-type: `Boolean`
-
-default: `false`
-
-By default, it will emit an `error` event when the command finishes unsuccessfully.
-
-#### options.quiet
-
-type: `Boolean`
-
-default: `false`
-
-By default, it will print the command output.
-
 #### options.cwd
 
 type: `String`
@@ -116,14 +80,6 @@ type: `String`
 default: [`process.cwd()`](http://nodejs.org/api/process.html#process_process_cwd)
 
 Sets the current working directory for the command. This can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
-
-[template]: http://lodash.com/docs#template
-
-#### options.templateData
-
-type: `Object`
-
-The data that can be accessed in template.
 
 #### options.env
 
@@ -134,3 +90,45 @@ By default, all the commands will be executed in an environment with all the var
 You can override any environment variables with this option.
 
 For example, setting it to `{PATH: process.env.PATH}` will reset the `PATH` if the default one brings your some troubles.
+
+#### options.quiet
+
+type: `Boolean`
+
+default: `false`
+
+By default, it will print the command output.
+
+#### options.verbose
+
+type: `Boolean`
+
+default: `false`
+
+Set to `true` to print the command(s) to stdout as they are executed
+
+#### options.ignoreErrors
+
+type: `Boolean`
+
+default: `false`
+
+By default, it will emit an `error` event when the command finishes unsuccessfully.
+
+#### options.errorMessage
+
+type: `String`
+
+default: ``Command `<%= command %>` failed with exit code <%= error.code %>``
+
+You can add a custom error message for when the command fails.
+This can be a [template][] which can be interpolated with the current `command`, some [file][] info (e.g. `file.path`) and some error info (e.g. `error.code`).
+
+#### options.templateData
+
+type: `Object`
+
+The data that can be accessed in [template][].
+
+[template]: http://lodash.com/docs#template
+[file]:     https://github.com/wearefractal/vinyl
