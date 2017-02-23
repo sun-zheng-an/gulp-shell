@@ -121,3 +121,7 @@ The data that can be accessed in [template][].
 
 [template]: http://lodash.com/docs#template
 [file]: https://github.com/wearefractal/vinyl
+
+## Changelog
+
+Details changes for each release are documented in the [release notes](https://github.com/sun-zheng-an/gulp-shell/releases).
