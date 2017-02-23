@@ -1,36 +1,36 @@
 /* eslint-env mocha */
 
-var gutil = require('gulp-util')
-var join = require('path').join
-var expect = require('chai').expect
+const gutil = require('gulp-util')
+const join = require('path').join
+const expect = require('chai').expect
 
-var shell = require('..')
+const shell = require('..')
 
 function expectToBeOk (stream, done) {
   stream
   .on('error', done)
-  .on('data', function () { done() })
+  .on('data', () => { done() })
 }
 
-describe('gulp-shell(commands, options)', function () {
-  var fakeFile = new gutil.File({
+describe('gulp-shell(commands, options)', () => {
+  const fakeFile = new gutil.File({
     cwd: __dirname,
     base: __dirname,
     path: join(__dirname, 'test-file')
   })
 
-  it('throws when `commands` is missing', function () {
+  it('throws when `commands` is missing', () => {
     expect(shell).to.throw('Missing commands')
   })
 
-  it('works when `commands` is a string', function () {
+  it('works when `commands` is a string', () => {
     expect(shell.bind(null, 'true')).to.not.throw()
   })
 
-  it('passes file through', function (done) {
-    var stream = shell(['true'])
+  it('passes file through', (done) => {
+    const stream = shell(['true'])
 
-    stream.on('data', function (file) {
+    stream.on('data', (file) => {
       expect(file).to.equal(fakeFile)
       done()
     })
@@ -38,9 +38,9 @@ describe('gulp-shell(commands, options)', function () {
     stream.write(fakeFile)
   })
 
-  it('executes command after interpolation', function (done) {
-    var stream = shell([
-      'test <%= file.path %> = ' + fakeFile.path
+  it('executes command after interpolation', (done) => {
+    const stream = shell([
+      `test <%= file.path %> = ${fakeFile.path}`
     ])
 
     expectToBeOk(stream, done)
@@ -48,9 +48,9 @@ describe('gulp-shell(commands, options)', function () {
     stream.write(fakeFile)
   })
 
-  it('prepends `./node_modules/.bin` to `PATH`', function (done) {
-    var stream = shell([
-      'echo $PATH | grep -q "' + join(process.cwd(), 'node_modules/.bin') + '"'
+  it('prepends `./node_modules/.bin` to `PATH`', (done) => {
+    const stream = shell([
+      `echo $PATH | grep -q "${join(process.cwd(), 'node_modules/.bin')}"`
     ], {shell: 'bash'})
 
     expectToBeOk(stream, done)
@@ -58,9 +58,9 @@ describe('gulp-shell(commands, options)', function () {
     stream.write(fakeFile)
   })
 
-  describe('.task(commands, options)', function () {
-    it('returns a function which returns a callback', function (done) {
-      var task = shell.task(['echo hello world'])
+  describe('.task(commands, options)', () => {
+    it('returns a function which returns a callback', (done) => {
+      const task = shell.task(['echo hello world'])
 
       expect(task).to.be.a('function')
 
@@ -68,11 +68,11 @@ describe('gulp-shell(commands, options)', function () {
     })
   })
 
-  describe('options', function () {
-    describe('cwd', function () {
-      it('sets the current working directory when `cwd` is a string', function (done) {
-        var stream = shell([
-          'test $PWD = ' + join(__dirname, '../..')
+  describe('options', () => {
+    describe('cwd', () => {
+      it('sets the current working directory when `cwd` is a string', (done) => {
+        const stream = shell([
+          `test $PWD = ${join(__dirname, '../..')}`
         ], {cwd: '..'})
 
         expectToBeOk(stream, done)
@@ -80,9 +80,9 @@ describe('gulp-shell(commands, options)', function () {
         stream.write(fakeFile)
       })
 
-      it('uses the process current working directory when `cwd` is not passed', function (done) {
-        var stream = shell([
-          'test $PWD = ' + join(__dirname, '..')
+      it('uses the process current working directory when `cwd` is not passed', (done) => {
+        const stream = shell([
+          `test $PWD = ${join(__dirname, '..')}`
         ])
 
         expectToBeOk(stream, done)
@@ -91,9 +91,9 @@ describe('gulp-shell(commands, options)', function () {
       })
     })
 
-    describe('shell', function () {
-      it('changes the shell', function (done) {
-        var stream = shell([
+    describe('shell', () => {
+      it('changes the shell', (done) => {
+        const stream = shell([
           '[[ $0 = bash ]]'
         ], {shell: 'bash'})
 
@@ -103,9 +103,9 @@ describe('gulp-shell(commands, options)', function () {
       })
     })
 
-    describe('quiet', function () {
-      it("won't output anything when `quiet` == true", function (done) {
-        var stream = shell(['echo cannot see me!'], {quiet: true})
+    describe('quiet', () => {
+      it("won't output anything when `quiet` == true", (done) => {
+        const stream = shell(['echo cannot see me!'], {quiet: true})
 
         expectToBeOk(stream, done)
 
@@ -113,25 +113,25 @@ describe('gulp-shell(commands, options)', function () {
       })
     })
 
-    describe('ignoreErrors', function () {
-      it('emits error by default', function (done) {
-        var stream = shell(['false'])
+    describe('ignoreErrors', () => {
+      it('emits error by default', (done) => {
+        const stream = shell(['false'])
 
-        stream.on('error', function () {
+        stream.on('error', () => {
           done()
         })
 
         stream.write(fakeFile)
       })
 
-      it("won't emit error when `ignoreErrors` == true", function (done) {
-        var stream = shell(['false'], {ignoreErrors: true})
+      it("won't emit error when `ignoreErrors` == true", (done) => {
+        const stream = shell(['false'], {ignoreErrors: true})
 
-        stream.on('error', function () {
+        stream.on('error', () => {
           throw new Error()
         })
 
-        stream.on('data', function () {
+        stream.on('data', () => {
           done()
         })
 
@@ -139,12 +139,12 @@ describe('gulp-shell(commands, options)', function () {
       })
     })
 
-    describe('errorMessage', function () {
-      it('allows for custom messages', function (done) {
-        var errorMessage = 'foo'
-        var stream = shell(['false'], {errorMessage: errorMessage})
+    describe('errorMessage', () => {
+      it('allows for custom messages', (done) => {
+        const errorMessage = 'foo'
+        const stream = shell(['false'], {errorMessage})
 
-        stream.on('error', function (error) {
+        stream.on('error', (error) => {
           expect(error.message).to.equal(errorMessage)
           done()
         })
@@ -152,12 +152,12 @@ describe('gulp-shell(commands, options)', function () {
         stream.write(fakeFile)
       })
 
-      it('includes the error object in the error context', function (done) {
-        var errorMessage = 'Foo <%= error.code %>'
-        var expectedMessage = 'Foo 2'
-        var stream = shell(['exit 2'], {errorMessage: errorMessage})
+      it('includes the error object in the error context', (done) => {
+        const errorMessage = 'Foo <%= error.code %>'
+        const expectedMessage = 'Foo 2'
+        const stream = shell(['exit 2'], {errorMessage})
 
-        stream.on('error', function (error) {
+        stream.on('error', (error) => {
           expect(error.message).to.equal(expectedMessage)
           done()
         })

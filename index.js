@@ -1,11 +1,11 @@
-var _ = require('lodash')
-var async = require('async')
-var gutil = require('gulp-util')
-var path = require('path')
-var spawn = require('child_process').spawn
-var through = require('through2')
+const _ = require('lodash')
+const async = require('async')
+const gutil = require('gulp-util')
+const path = require('path')
+const spawn = require('child_process').spawn
+const through = require('through2')
 
-var PLUGIN_NAME = 'gulp-shell'
+const PLUGIN_NAME = 'gulp-shell'
 
 function normalizeCommands (commands) {
   if (typeof commands === 'string') {
@@ -29,42 +29,42 @@ function normalizeOptions (options) {
     errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>'
   }, options)
 
-  var pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
-  var pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
-  var newPath = pathToBin + path.delimiter + process.env[pathName]
-  options.env = _.extend(process.env, _.fromPairs([[pathName, newPath]]), options.env)
+  const pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
+  const pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
+  const newPath = pathToBin + path.delimiter + process.env[pathName]
+  options.env = _.extend(process.env, {[pathName]: newPath}, options.env)
 
   return options
 }
 
 function runCommands (commands, options, file, done) {
-  async.eachSeries(commands, function (command, done) {
-    var context = _.extend({file: file}, options.templateData)
+  async.eachSeries(commands, (command, done) => {
+    const context = _.extend({file}, options.templateData)
     command = gutil.template(command, context)
 
     if (options.verbose) {
       gutil.log(gutil.colors.cyan(command))
     }
 
-    var child = spawn(command, {
+    const child = spawn(command, {
       env: options.env,
       cwd: gutil.template(options.cwd, context),
       shell: options.shell,
       stdio: options.quiet ? 'ignore' : 'inherit'
     })
 
-    child.on('exit', function (code) {
+    child.on('exit', (code) => {
       if (code === 0 || options.ignoreErrors) {
         return done()
       }
 
-      var context = _.extend({
-        command: command,
-        file: file,
-        error: {code: code}
+      const context = _.extend({
+        command,
+        file,
+        error: {code}
       }, options.templateData)
 
-      var message = gutil.template(options.errorMessage, context)
+      const message = gutil.template(options.errorMessage, context)
 
       done(new gutil.PluginError(PLUGIN_NAME, message))
     })
@@ -75,14 +75,12 @@ function shell (commands, options) {
   commands = normalizeCommands(commands)
   options = normalizeOptions(options)
 
-  var stream = through.obj(function (file, _encoding, done) {
-    var self = this
-
-    runCommands(commands, options, file, function (error) {
+  const stream = through.obj(function (file, _encoding, done) {
+    runCommands(commands, options, file, (error) => {
       if (error) {
-        self.emit('error', error)
+        this.emit('error', error)
       } else {
-        self.push(file)
+        this.push(file)
       }
       done()
     })
@@ -93,10 +91,8 @@ function shell (commands, options) {
   return stream
 }
 
-shell.task = function (commands, options) {
-  return function (done) {
-    runCommands(normalizeCommands(commands), normalizeOptions(options), null, done)
-  }
+shell.task = (commands, options) => (done) => {
+  runCommands(normalizeCommands(commands), normalizeOptions(options), null, done)
 }
 
 module.exports = shell
