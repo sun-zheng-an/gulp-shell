@@ -1,23 +1,11 @@
 # gulp-shell
 
-[![NPM version][npm-image]][npm-url]
-[![Standard - JavaScript Style Guide][standard-image]][standard-url]
-[![Build Status][travis-image]][travis-url]
-[![Coveralls Status][coveralls-image]][coveralls-url]
-[![Dependency Status][david-dm-image]][david-dm-url]
-[![Downloads][downloads-image]][npm-url]
-
-[npm-url]:         https://npmjs.org/package/gulp-shell
-[npm-image]:       https://img.shields.io/npm/v/gulp-shell.svg
-[standard-image]:  https://img.shields.io/badge/code_style-standard-brightgreen.svg
-[standard-url]:    http://standardjs.com/
-[travis-url]:      https://travis-ci.org/sun-zheng-an/gulp-shell
-[travis-image]:    https://img.shields.io/travis/sun-zheng-an/gulp-shell/master.svg
-[coveralls-url]:   https://coveralls.io/r/sun-zheng-an/gulp-shell
-[coveralls-image]: https://img.shields.io/coveralls/sun-zheng-an/gulp-shell/master.svg
-[david-dm-url]:    https://david-dm.org/sun-zheng-an/gulp-shell
-[david-dm-image]:  https://img.shields.io/david/sun-zheng-an/gulp-shell.svg
-[downloads-image]: https://img.shields.io/npm/dm/gulp-shell.svg
+[![NPM version](https://img.shields.io/npm/v/gulp-shell.svg)](https://npmjs.org/package/gulp-shell)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
+[![Build Status](https://img.shields.io/travis/sun-zheng-an/gulp-shell/master.svg)](https://travis-ci.org/sun-zheng-an/gulp-shell)
+[![Coveralls Status](https://img.shields.io/coveralls/sun-zheng-an/gulp-shell/master.svg)](https://coveralls.io/r/sun-zheng-an/gulp-shell)
+[![Dependency Status](https://img.shields.io/david/sun-zheng-an/gulp-shell.svg)](https://david-dm.org/sun-zheng-an/gulp-shell)
+[![Downloads](https://img.shields.io/npm/dm/gulp-shell.svg)](https://npmjs.org/package/gulp-shell)
 
 > A handy command line interface for gulp
 
@@ -59,9 +47,8 @@ gulp.task('shorthand', shell.task([
 ]))
 ```
 
-You can find more examples in the [gulpfile][] of this project.
+You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js) of this project.
 
-[gulpfile]: https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js
 
 ## API
 
