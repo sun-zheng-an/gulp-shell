@@ -18,25 +18,16 @@ npm install --save-dev gulp-shell
 ## Usage
 
 ```js
-var gulp  = require('gulp')
+var gulp = require('gulp')
 var shell = require('gulp-shell')
 
 gulp.task('example', function () {
   return gulp.src('*.js', {read: false})
-    .pipe(shell([
-      'echo <%= f(file.path) %>',
-      'ls -l <%= file.path %>'
-    ], {
-      templateData: {
-        f: function (s) {
-          return s.replace(/$/, '.bak')
-        }
-      }
-    }))
+  .pipe(shell([
+    'echo <%= file.path %>'
+  ]))
 })
 ```
-
-If you just want to execute a series of commands only once, ~~starting the stream with `gulp.src('')`~~ should do the trick. However, [this is an anti-pattern](https://github.com/sun-zheng-an/gulp-shell/issues/55), and **it won't work in `gulp 4.0`** .
 
 Or you can use this shorthand:
 
@@ -49,6 +40,7 @@ gulp.task('shorthand', shell.task([
 
 You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js) of this project.
 
+**WARNING**: Running commands like ~~`gulp.src('').pipe(shell('whatever'))`~~ is [considered as an anti-pattern](https://github.com/sun-zheng-an/gulp-shell/issues/55). **PLEASE DON'T DO THAT ANYMORE**.
 
 ## API
 
@@ -126,4 +118,4 @@ type: `Object`
 The data that can be accessed in [template][].
 
 [template]: http://lodash.com/docs#template
-[file]:     https://github.com/wearefractal/vinyl
+[file]: https://github.com/wearefractal/vinyl
