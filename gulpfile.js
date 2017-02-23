@@ -1,8 +1,11 @@
-var gulp = require('gulp')
-var shell = require('./')
+const gulp = require('gulp')
+const shell = require('./')
 
-var paths = {
-  js: ['*.js', 'test/*.js']
+const paths = {
+  js: [
+    '*.js',
+    'test/*.js'
+  ]
 }
 
 gulp.task('test', shell.task('mocha'))
@@ -15,6 +18,6 @@ gulp.task('lint', shell.task('standard ' + paths.js.join(' ')))
 
 gulp.task('default', ['coverage', 'lint'])
 
-gulp.task('watch', function () {
+gulp.task('watch', () => {
   gulp.watch(paths.js, ['default'])
 })

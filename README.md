@@ -18,10 +18,10 @@ npm install --save-dev gulp-shell
 ## Usage
 
 ```js
-var gulp = require('gulp')
-var shell = require('gulp-shell')
+const gulp = require('gulp')
+const shell = require('gulp-shell')
 
-gulp.task('example', function () {
+gulp.task('example', () => {
   return gulp.src('*.js', {read: false})
   .pipe(shell([
     'echo <%= file.path %>'
