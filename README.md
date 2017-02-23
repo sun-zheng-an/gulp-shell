@@ -52,6 +52,8 @@ type: `Array` or `String`
 
 A command can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
 
+**WARNING**: [Using command templates can be extremely dangerous](https://github.com/sun-zheng-an/gulp-shell/issues/83). Don't shoot yourself in the foot by ~~passing arguments like `$(rm -rf $HOME)`~~.
+
 #### options.cwd
 
 type: `String`
