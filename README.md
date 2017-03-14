@@ -32,10 +32,7 @@ gulp.task('example', () => {
 Or you can use this shorthand:
 
 ```js
-gulp.task('shorthand', shell.task([
-  'echo hello',
-  'echo world'
-]))
+gulp.task('greet', shell.task('echo Hello, World!'))
 ```
 
 You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js) of this project.
