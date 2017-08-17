@@ -35,6 +35,16 @@ Or you can use this shorthand:
 gulp.task('greet', shell.task('echo Hello, World!'))
 ```
 
+If you want to use the shorthand inside a task, just invoke `shell.task`:
+
+```js
+gulp.task('greet', () => {
+    console.log("Starting greet task ...")
+
+    return shell.task('echo Hello, World!')()
+})
+```
+
 You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js) of this project.
 
 **WARNING**: Running commands like ~~`gulp.src('').pipe(shell('whatever'))`~~ is [considered as an anti-pattern](https://github.com/sun-zheng-an/gulp-shell/issues/55). **PLEASE DON'T DO THAT ANYMORE**.
