@@ -1,11 +1,11 @@
 const _ = require('lodash')
 const async = require('async')
-const PluginError = require('plugin-error')
-const fancyLog = require('fancy-log')
-const template = require('lodash.template')
 const chalk = require('chalk')
+const fancyLog = require('fancy-log')
 const path = require('path')
+const PluginError = require('plugin-error')
 const spawn = require('child_process').spawn
+const template = require('lodash.template')
 const through = require('through2')
 
 const PLUGIN_NAME = 'gulp-shell'
