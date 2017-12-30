@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const gutil = require('gulp-util')
+const Vinyl = require('vinyl')
 const join = require('path').join
 const expect = require('chai').expect
 
@@ -13,7 +13,7 @@ function expectToBeOk (stream, done) {
 }
 
 describe('gulp-shell(commands, options)', () => {
-  const fakeFile = new gutil.File({
+  const fakeFile = new Vinyl({
     cwd: __dirname,
     base: __dirname,
     path: join(__dirname, 'test-file')

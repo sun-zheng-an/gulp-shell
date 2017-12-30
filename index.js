@@ -1,6 +1,9 @@
 const _ = require('lodash')
 const async = require('async')
-const gutil = require('gulp-util')
+const PluginError = require('plugin-error')
+const fancyLog = require('fancy-log')
+const template = require('lodash.template')
+const chalk = require('chalk')
 const path = require('path')
 const spawn = require('child_process').spawn
 const through = require('through2')
@@ -13,7 +16,7 @@ function normalizeCommands (commands) {
   }
 
   if (!Array.isArray(commands)) {
-    throw new gutil.PluginError(PLUGIN_NAME, 'Missing commands')
+    throw new PluginError(PLUGIN_NAME, 'Missing commands')
   }
 
   return commands
@@ -40,15 +43,15 @@ function normalizeOptions (options) {
 function runCommands (commands, options, file, done) {
   async.eachSeries(commands, (command, done) => {
     const context = _.extend({file}, options.templateData)
-    command = gutil.template(command, context)
+    command = template(command)(context)
 
     if (options.verbose) {
-      gutil.log(gutil.colors.cyan(command))
+      fancyLog(chalk.cyan(command))
     }
 
     const child = spawn(command, {
       env: options.env,
-      cwd: gutil.template(options.cwd, context),
+      cwd: template(options.cwd)(context),
       shell: options.shell,
       stdio: options.quiet ? 'ignore' : 'inherit'
     })
@@ -64,9 +67,9 @@ function runCommands (commands, options, file, done) {
         error: {code}
       }, options.templateData)
 
-      const message = gutil.template(options.errorMessage, context)
+      const message = template(options.errorMessage)(context)
 
-      done(new gutil.PluginError(PLUGIN_NAME, message))
+      done(new PluginError(PLUGIN_NAME, message))
     })
   }, done)
 }
