@@ -35,14 +35,14 @@ function normalizeOptions (options) {
   const pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
   const pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
   const newPath = pathToBin + path.delimiter + process.env[pathName]
-  options.env = _.extend({}, process.env, {[pathName]: newPath}, options.env)
+  options.env = _.extend({}, process.env, { [pathName]: newPath }, options.env)
 
   return options
 }
 
 function runCommands (commands, options, file, done) {
   async.eachSeries(commands, (command, done) => {
-    const context = _.extend({file}, options.templateData)
+    const context = _.extend({ file }, options.templateData)
     command = template(command)(context)
 
     if (options.verbose) {
@@ -64,7 +64,7 @@ function runCommands (commands, options, file, done) {
       const context = _.extend({
         command,
         file,
-        error: {code}
+        error: { code }
       }, options.templateData)
 
       const message = template(options.errorMessage)(context)
