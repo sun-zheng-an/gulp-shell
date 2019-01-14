@@ -7,18 +7,17 @@ const paths = {
 
 gulp.task('test', shell.task('mocha'))
 
-gulp.task('coverage', ['test'], shell.task('istanbul cover _mocha'))
+gulp.task('coverage', shell.task('nyc mocha'))
 
 gulp.task(
   'coveralls',
-  ['coverage'],
-  shell.task('cat coverage/lcov.info | coveralls')
+  gulp.series('coverage', shell.task('nyc report --reporter=text-lcov | coveralls'))
 )
 
 gulp.task('lint', shell.task('standard ' + paths.js.join(' ')))
 
-gulp.task('default', ['coverage', 'lint'])
+gulp.task('default', gulp.parallel('coverage', 'lint'))
 
-gulp.task('watch', () => {
-  gulp.watch(paths.js, ['default'])
-})
+gulp.task('watch', gulp.series('default', function watch () {
+  gulp.watch(paths.js, gulp.task('default'))
+}))
