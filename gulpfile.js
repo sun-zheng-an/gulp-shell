@@ -7,11 +7,11 @@ const paths = {
 
 gulp.task('test', shell.task('mocha'))
 
-gulp.task('coverage', shell.task('istanbul cover _mocha'))
+gulp.task('coverage', shell.task('nyc mocha'))
 
 gulp.task(
   'coveralls',
-  gulp.series('coverage', shell.task('cat coverage/lcov.info | coveralls'))
+  gulp.series('coverage', shell.task('nyc report --reporter=text-lcov | coveralls'))
 )
 
 gulp.task('lint', shell.task('standard ' + paths.js.join(' ')))
