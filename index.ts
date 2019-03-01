@@ -71,7 +71,7 @@ const runCommands = (
       command = template(command)(context)
 
       if (options.verbose) {
-        fancyLog(chalk.cyan(command))
+        fancyLog(`${PLUGIN_NAME}:`, chalk.cyan(command))
       }
 
       const child = spawn(command, {
