@@ -33,7 +33,7 @@ Or you can use this shorthand:
 gulp.task('greet', shell.task('echo Hello, World!'))
 ```
 
-You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js) of this project.
+You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.ts) of this project.
 
 **WARNING**: Running commands like ~~`gulp.src('').pipe(shell('whatever'))`~~ is [considered as an anti-pattern](https://github.com/sun-zheng-an/gulp-shell/issues/55). **PLEASE DON'T DO THAT ANYMORE**.
 
@@ -43,7 +43,7 @@ You can find more examples in the [gulpfile](https://github.com/sun-zheng-an/gul
 
 #### commands
 
-type: `Array` or `String`
+type: `string` or `Array<string>`
 
 A command can be a [template][] which can be interpolated by some [file][] info (e.g. `file.path`).
 
@@ -51,7 +51,7 @@ A command can be a [template][] which can be interpolated by some [file][] info 
 
 #### options.cwd
 
-type: `String`
+type: `string`
 
 default: [`process.cwd()`](http://nodejs.org/api/process.html#process_process_cwd)
 
@@ -59,7 +59,7 @@ Sets the current working directory for the command. This can be a [template][] w
 
 #### options.env
 
-type: `Object`
+type: `object`
 
 By default, all the commands will be executed in an environment with all the variables in [`process.env`](http://nodejs.org/api/process.html#process_process_env) and `PATH` prepended by `./node_modules/.bin` (allowing you to run executables in your Node's dependencies).
 
@@ -69,7 +69,7 @@ For example, setting it to `{ PATH: process.env.PATH }` will reset the `PATH` if
 
 #### options.shell
 
-type: `String`
+type: `string`
 
 default: `/bin/sh` on UNIX, and `cmd.exe` on Windows
 
@@ -77,7 +77,7 @@ Change it to `bash` if you like.
 
 #### options.quiet
 
-type: `Boolean`
+type: `boolean`
 
 default: `false`
 
@@ -85,7 +85,7 @@ By default, it will print the command output.
 
 #### options.verbose
 
-type: `Boolean`
+type: `boolean`
 
 default: `false`
 
@@ -93,7 +93,7 @@ Set to `true` to print the command(s) to stdout as they are executed
 
 #### options.ignoreErrors
 
-type: `Boolean`
+type: `boolean`
 
 default: `false`
 
@@ -101,16 +101,16 @@ By default, it will emit an `error` event when the command finishes unsuccessful
 
 #### options.errorMessage
 
-type: `String`
+type: `string`
 
-default: ``Command `<%= command %>` failed with exit code <%= error.code %>``
+default: `` Command `<%= command %>` failed with exit code <%= error.code %> ``
 
 You can add a custom error message for when the command fails.
 This can be a [template][] which can be interpolated with the current `command`, some [file][] info (e.g. `file.path`) and some error info (e.g. `error.code`).
 
 #### options.templateData
 
-type: `Object`
+type: `object`
 
 The data that can be accessed in [template][].
 

@@ -1,12 +1,12 @@
 /* eslint-env mocha */
 
-const expect = require('chai').expect
-const join = require('path').join
+const { expect } = require('chai')
+const { join } = require('path')
 const Vinyl = require('vinyl')
 
 const shell = require('..')
 
-function expectToBeOk(stream, done) {
+const expectToBeOk = (stream, done) => {
   stream.on('error', done).on('data', () => {
     done()
   })
