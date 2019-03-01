@@ -6,7 +6,7 @@ const Vinyl = require('vinyl')
 
 const shell = require('..')
 
-function expectToBeOk (stream, done) {
+function expectToBeOk(stream, done) {
   stream.on('error', done).on('data', () => {
     done()
   })

@@ -1,7 +1,6 @@
 # gulp-shell
 
 [![NPM version](https://img.shields.io/npm/v/gulp-shell.svg)](https://npmjs.org/package/gulp-shell)
-[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
 [![Build Status](https://img.shields.io/travis/sun-zheng-an/gulp-shell/master.svg)](https://travis-ci.org/sun-zheng-an/gulp-shell)
 [![Coveralls Status](https://img.shields.io/coveralls/sun-zheng-an/gulp-shell/master.svg)](https://coveralls.io/r/sun-zheng-an/gulp-shell)
 [![Dependency Status](https://img.shields.io/david/sun-zheng-an/gulp-shell.svg)](https://david-dm.org/sun-zheng-an/gulp-shell)
@@ -22,10 +21,9 @@ const gulp = require('gulp')
 const shell = require('gulp-shell')
 
 gulp.task('example', () => {
-  return gulp.src('*.js', {read: false})
-  .pipe(shell([
-    'echo <%= file.path %>'
-  ]))
+  return gulp
+    .src('*.js', { read: false })
+    .pipe(shell(['echo <%= file.path %>']))
 })
 ```
 
@@ -67,7 +65,7 @@ By default, all the commands will be executed in an environment with all the var
 
 You can override any environment variables with this option.
 
-For example, setting it to `{PATH: process.env.PATH}` will reset the `PATH` if the default one brings your some troubles.
+For example, setting it to `{ PATH: process.env.PATH }` will reset the `PATH` if the default one brings your some troubles.
 
 #### options.shell
 

@@ -10,7 +10,7 @@ const through = require('through2')
 
 const PLUGIN_NAME = 'gulp-shell'
 
-function normalizeCommands (commands) {
+function normalizeCommands(commands) {
   if (typeof commands === 'string') {
     commands = [commands]
   }
@@ -22,15 +22,19 @@ function normalizeCommands (commands) {
   return commands
 }
 
-function normalizeOptions (options) {
-  options = _.extend({
-    cwd: process.cwd(),
-    shell: true,
-    quiet: false,
-    verbose: false,
-    ignoreErrors: false,
-    errorMessage: 'Command `<%= command %>` failed with exit code <%= error.code %>'
-  }, options)
+function normalizeOptions(options) {
+  options = _.extend(
+    {
+      cwd: process.cwd(),
+      shell: true,
+      quiet: false,
+      verbose: false,
+      ignoreErrors: false,
+      errorMessage:
+        'Command `<%= command %>` failed with exit code <%= error.code %>'
+    },
+    options
+  )
 
   const pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
   const pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
@@ -40,46 +44,53 @@ function normalizeOptions (options) {
   return options
 }
 
-function runCommands (commands, options, file, done) {
-  async.eachSeries(commands, (command, done) => {
-    const context = _.extend({ file }, options.templateData)
-    command = template(command)(context)
+function runCommands(commands, options, file, done) {
+  async.eachSeries(
+    commands,
+    (command, done) => {
+      const context = _.extend({ file }, options.templateData)
+      command = template(command)(context)
 
-    if (options.verbose) {
-      fancyLog(chalk.cyan(command))
-    }
-
-    const child = spawn(command, {
-      env: options.env,
-      cwd: template(options.cwd)(context),
-      shell: options.shell,
-      stdio: options.quiet ? 'ignore' : 'inherit'
-    })
-
-    child.on('exit', (code) => {
-      if (code === 0 || options.ignoreErrors) {
-        return done()
+      if (options.verbose) {
+        fancyLog(chalk.cyan(command))
       }
 
-      const context = _.extend({
-        command,
-        file,
-        error: { code }
-      }, options.templateData)
+      const child = spawn(command, {
+        env: options.env,
+        cwd: template(options.cwd)(context),
+        shell: options.shell,
+        stdio: options.quiet ? 'ignore' : 'inherit'
+      })
 
-      const message = template(options.errorMessage)(context)
+      child.on('exit', code => {
+        if (code === 0 || options.ignoreErrors) {
+          return done()
+        }
 
-      done(new PluginError(PLUGIN_NAME, message))
-    })
-  }, done)
+        const context = _.extend(
+          {
+            command,
+            file,
+            error: { code }
+          },
+          options.templateData
+        )
+
+        const message = template(options.errorMessage)(context)
+
+        done(new PluginError(PLUGIN_NAME, message))
+      })
+    },
+    done
+  )
 }
 
-function shell (commands, options) {
+function shell(commands, options) {
   commands = normalizeCommands(commands)
   options = normalizeOptions(options)
 
-  const stream = through.obj(function (file, _encoding, done) {
-    runCommands(commands, options, file, (error) => {
+  const stream = through.obj(function(file, _encoding, done) {
+    runCommands(commands, options, file, error => {
       if (error) {
         this.emit('error', error)
       } else {
@@ -94,8 +105,13 @@ function shell (commands, options) {
   return stream
 }
 
-shell.task = (commands, options) => (done) => {
-  runCommands(normalizeCommands(commands), normalizeOptions(options), null, done)
+shell.task = (commands, options) => done => {
+  runCommands(
+    normalizeCommands(commands),
+    normalizeOptions(options),
+    null,
+    done
+  )
 }
 
 module.exports = shell
