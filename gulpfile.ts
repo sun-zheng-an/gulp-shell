@@ -17,9 +17,11 @@ gulp.task(
   )
 )
 
+gulp.task('lint', shell.task('eslint ' + files.join(' ')))
+
 gulp.task('format', shell.task('prettier --write ' + files.join(' ')))
 
-gulp.task('default', gulp.series('build', 'coverage', 'format'))
+gulp.task('default', gulp.series('build', 'coverage', 'lint', 'format'))
 
 gulp.task(
   'watch',

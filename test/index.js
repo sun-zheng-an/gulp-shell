@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const { expect } = require('chai')
 const { join } = require('path')
