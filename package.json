@@ -10,7 +10,9 @@
   "scripts": {
     "build": "gulp build",
     "test": "gulp test lint",
-    "coveralls": "gulp coveralls"
+    "coveralls": "gulp coveralls",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
