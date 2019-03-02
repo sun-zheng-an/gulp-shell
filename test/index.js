@@ -109,6 +109,18 @@ describe('gulp-shell(commands, options)', () => {
       })
     })
 
+    describe('verbose', () => {
+      it('prints the command', done => {
+        const stream = shell(['echo you can see me twice'], {
+          verbose: true
+        })
+
+        expectToBeOk(stream, done)
+
+        stream.write(fakeFile)
+      })
+    })
+
     describe('ignoreErrors', () => {
       it('emits error by default', done => {
         const stream = shell(['false'])
