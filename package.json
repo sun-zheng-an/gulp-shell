@@ -1,6 +1,6 @@
 {
   "name": "gulp-shell",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "description": "A handy command line interface for gulp",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
