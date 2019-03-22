@@ -6,6 +6,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./lib",
+    "importHelpers": true,
 
     "strict": true,
     "noUnusedLocals": true,
