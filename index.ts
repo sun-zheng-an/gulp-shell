@@ -1,4 +1,3 @@
-import { eachSeries, ErrorCallback } from 'async'
 import chalk from 'chalk'
 import { spawn } from 'child_process'
 import fancyLog from 'fancy-log'
@@ -6,7 +5,6 @@ import template from 'lodash.template'
 import * as path from 'path'
 import PluginError from 'plugin-error'
 import { obj as throughObj } from 'through2'
-import { TaskFunction } from 'undertaker'
 import Vinyl from 'vinyl'
 
 const PLUGIN_NAME = 'gulp-shell'
@@ -58,48 +56,53 @@ const normalizeOptions = (options: Options = {}): Required<Options> => {
   }
 }
 
-const runCommands = (
-  commands: string[],
+const runCommand = (
+  command: string,
   options: Required<Options>,
-  file: Vinyl | null,
-  done: ErrorCallback
-): void => {
-  eachSeries(
-    commands,
-    (command, done) => {
-      const context = { file, ...options.templateData }
-      command = template(command)(context)
+  file: Vinyl | null
+): Promise<void> => {
+  const context = { file, ...options.templateData }
+  command = template(command)(context)
 
-      if (options.verbose) {
-        fancyLog(`${PLUGIN_NAME}:`, chalk.cyan(command))
+  if (options.verbose) {
+    fancyLog(`${PLUGIN_NAME}:`, chalk.cyan(command))
+  }
+
+  const child = spawn(command, {
+    env: options.env,
+    cwd: template(options.cwd)(context),
+    shell: options.shell,
+    stdio: options.quiet ? 'ignore' : 'inherit'
+  })
+
+  return new Promise((resolve, reject) => {
+    child.on('exit', code => {
+      if (code === 0 || options.ignoreErrors) {
+        return resolve()
       }
 
-      const child = spawn(command, {
-        env: options.env,
-        cwd: template(options.cwd)(context),
-        shell: options.shell,
-        stdio: options.quiet ? 'ignore' : 'inherit'
-      })
+      const context = {
+        command,
+        file,
+        error: { code },
+        ...options.templateData
+      }
 
-      child.on('exit', code => {
-        if (code === 0 || options.ignoreErrors) {
-          return done()
-        }
+      const message = template(options.errorMessage)(context)
 
-        const context = {
-          command,
-          file,
-          error: { code },
-          ...options.templateData
-        }
+      reject(new PluginError(PLUGIN_NAME, message))
+    })
+  })
+}
 
-        const message = template(options.errorMessage)(context)
-
-        done(new PluginError(PLUGIN_NAME, message))
-      })
-    },
-    done
-  )
+const runCommands = async (
+  commands: string[],
+  options: Required<Options>,
+  file: Vinyl | null
+): Promise<void> => {
+  for (const command of commands) {
+    await runCommand(command, options, file)
+  }
 }
 
 const shell = (
@@ -110,14 +113,14 @@ const shell = (
   const normalizedOptions = normalizeOptions(options)
 
   const stream = throughObj(function(file, _encoding, done) {
-    runCommands(normalizedCommands, normalizedOptions, file, error => {
-      if (error) {
-        this.emit('error', error)
-      } else {
+    runCommands(normalizedCommands, normalizedOptions, file)
+      .then(() => {
         this.push(file)
-      }
-      done()
-    })
+      })
+      .catch(error => {
+        this.emit('error', error)
+      })
+      .finally(done)
   })
 
   stream.resume()
@@ -125,16 +128,7 @@ const shell = (
   return stream
 }
 
-shell.task = (
-  commands: string | string[],
-  options?: Options
-): TaskFunction => done => {
-  runCommands(
-    normalizeCommands(commands),
-    normalizeOptions(options),
-    null,
-    done
-  )
-}
+shell.task = (commands: string | string[], options?: Options) => () =>
+  runCommands(normalizeCommands(commands), normalizeOptions(options), null)
 
 export = shell

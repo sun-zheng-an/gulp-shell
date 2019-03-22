@@ -59,12 +59,13 @@ describe('gulp-shell(commands, options)', () => {
   })
 
   describe('.task(commands, options)', () => {
-    it('returns a function which returns a callback', done => {
+    it('returns a function which returns a promise', done => {
       const task = shell.task(['echo hello world'])
+      const promise = task()
 
-      expect(task).to.be.a('function')
+      expect(promise).to.be.a('promise')
 
-      task(done)
+      promise.then(done)
     })
   })
 
