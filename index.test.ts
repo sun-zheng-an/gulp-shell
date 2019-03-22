@@ -1,13 +1,12 @@
-/* eslint-env mocha */
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { join } from 'path'
+import Vinyl from 'vinyl'
 
-const { expect } = require('chai')
-const { join } = require('path')
-const Vinyl = require('vinyl')
+import shell from './index'
 
-const shell = require('..')
-
-const expectToBeOk = (stream, done) => {
+const expectToBeOk = (
+  stream: NodeJS.ReadWriteStream,
+  done: jest.DoneCallback
+): void => {
   stream.on('error', done).on('data', () => {
     done()
   })
@@ -21,18 +20,18 @@ describe('gulp-shell(commands, options)', () => {
   })
 
   it('throws when `commands` is missing', () => {
-    expect(shell).to.throw('Missing commands')
+    expect(shell).toThrow('Missing commands')
   })
 
   it('works when `commands` is a string', () => {
-    expect(shell.bind(null, 'true')).to.not.throw()
+    expect(shell.bind(null, 'true')).not.toThrow()
   })
 
   it('passes file through', done => {
     const stream = shell(['true'])
 
     stream.on('data', file => {
-      expect(file).to.equal(fakeFile)
+      expect(file).toBe(fakeFile)
       done()
     })
 
@@ -63,7 +62,7 @@ describe('gulp-shell(commands, options)', () => {
       const task = shell.task(['echo hello world'])
       const promise = task()
 
-      expect(promise).to.be.a('promise')
+      expect(promise).toBeInstanceOf(Promise)
 
       promise.then(done)
     })
@@ -72,7 +71,7 @@ describe('gulp-shell(commands, options)', () => {
   describe('options', () => {
     describe('cwd', () => {
       it('sets the current working directory when `cwd` is a string', done => {
-        const stream = shell([`test $PWD = ${join(__dirname, '../..')}`], {
+        const stream = shell([`test $PWD = ${join(__dirname, '..')}`], {
           cwd: '..'
         })
 
@@ -82,7 +81,7 @@ describe('gulp-shell(commands, options)', () => {
       })
 
       it('uses the process current working directory when `cwd` is not passed', done => {
-        const stream = shell([`test $PWD = ${join(__dirname, '..')}`])
+        const stream = shell([`test $PWD = ${__dirname}`])
 
         expectToBeOk(stream, done)
 
@@ -154,7 +153,7 @@ describe('gulp-shell(commands, options)', () => {
         const stream = shell(['false'], { errorMessage })
 
         stream.on('error', error => {
-          expect(error.message).to.equal(errorMessage)
+          expect(error.message).toBe(errorMessage)
           done()
         })
 
@@ -167,7 +166,7 @@ describe('gulp-shell(commands, options)', () => {
         const stream = shell(['exit 2'], { errorMessage })
 
         stream.on('error', error => {
-          expect(error.message).to.equal(expectedMessage)
+          expect(error.message).toBe(expectedMessage)
           done()
         })
 
