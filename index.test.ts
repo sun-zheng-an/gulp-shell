@@ -3,7 +3,7 @@ import Vinyl from 'vinyl'
 
 import shell from './index'
 
-const expectToBeOk = (
+const expectToFlow = (
   stream: NodeJS.ReadWriteStream,
   done: jest.DoneCallback
 ): void => {
@@ -41,7 +41,7 @@ describe('gulp-shell(commands, options)', () => {
   it('executes command after interpolation', done => {
     const stream = shell([`test <%= file.path %> = ${fakeFile.path}`])
 
-    expectToBeOk(stream, done)
+    expectToFlow(stream, done)
 
     stream.write(fakeFile)
   })
@@ -52,7 +52,7 @@ describe('gulp-shell(commands, options)', () => {
       { shell: 'bash' }
     )
 
-    expectToBeOk(stream, done)
+    expectToFlow(stream, done)
 
     stream.write(fakeFile)
   })
@@ -75,7 +75,7 @@ describe('gulp-shell(commands, options)', () => {
           cwd: '..'
         })
 
-        expectToBeOk(stream, done)
+        expectToFlow(stream, done)
 
         stream.write(fakeFile)
       })
@@ -83,7 +83,7 @@ describe('gulp-shell(commands, options)', () => {
       it('uses the process current working directory when `cwd` is not passed', done => {
         const stream = shell([`test $PWD = ${__dirname}`])
 
-        expectToBeOk(stream, done)
+        expectToFlow(stream, done)
 
         stream.write(fakeFile)
       })
@@ -93,7 +93,7 @@ describe('gulp-shell(commands, options)', () => {
       it('changes the shell', done => {
         const stream = shell(['[[ $0 = bash ]]'], { shell: 'bash' })
 
-        expectToBeOk(stream, done)
+        expectToFlow(stream, done)
 
         stream.write(fakeFile)
       })
@@ -103,7 +103,7 @@ describe('gulp-shell(commands, options)', () => {
       it("won't output anything when `quiet` == true", done => {
         const stream = shell(['echo cannot see me!'], { quiet: true })
 
-        expectToBeOk(stream, done)
+        expectToFlow(stream, done)
 
         stream.write(fakeFile)
       })
@@ -115,7 +115,7 @@ describe('gulp-shell(commands, options)', () => {
           verbose: true
         })
 
-        expectToBeOk(stream, done)
+        expectToFlow(stream, done)
 
         stream.write(fakeFile)
       })

@@ -34,7 +34,7 @@ const normalizeCommands = (commands: string | string[]): string[] => {
 
 const normalizeOptions = (options: Options = {}): Required<Options> => {
   const pathToBin = path.join(process.cwd(), 'node_modules', '.bin')
-  const pathName = /^win/.test(process.platform) ? 'Path' : 'PATH'
+  const pathName = process.platform === 'win32' ? 'Path' : 'PATH'
   const newPath = pathToBin + path.delimiter + process.env[pathName]
   const env = {
     ...process.env,
