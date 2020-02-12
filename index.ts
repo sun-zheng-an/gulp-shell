@@ -130,7 +130,8 @@ const shell = (
   return stream
 }
 
-shell.task = (commands: string | string[], options?: Options) => () =>
-  runCommands(normalizeCommands(commands), normalizeOptions(options), null)
+shell.task = (commands: string | string[], options?: Options) => (): Promise<
+  void
+> => runCommands(normalizeCommands(commands), normalizeOptions(options), null)
 
 export = shell
