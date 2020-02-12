@@ -117,12 +117,11 @@ const shell = (
     runCommands(normalizedCommands, normalizedOptions, file)
       .then(() => {
         this.push(file)
-        done()
       })
       .catch(error => {
         this.emit('error', error)
-        done()
       })
+      .finally(done)
   })
 
   stream.resume()
