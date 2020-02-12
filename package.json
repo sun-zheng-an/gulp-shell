@@ -2,8 +2,8 @@
   "name": "gulp-shell",
   "version": "0.7.1",
   "description": "A handy command line interface for gulp",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/index.*"
   ],
