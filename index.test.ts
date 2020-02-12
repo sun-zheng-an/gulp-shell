@@ -1,3 +1,5 @@
+/* eslint jest/expect-expect: ["error", { "assertFunctionNames": ["expect", "expectToFlow"] }] */
+
 import { join } from 'path'
 import Vinyl from 'vinyl'
 
@@ -5,7 +7,7 @@ import shell from './index'
 
 const expectToFlow = (
   stream: NodeJS.ReadWriteStream,
-  done: jest.DoneCallback
+  done: (error?: unknown) => void
 ): void => {
   stream.on('error', done).on('data', () => {
     done()
@@ -27,151 +29,164 @@ describe('gulp-shell(commands, options)', () => {
     expect(shell.bind(null, 'true')).not.toThrow()
   })
 
-  it('passes file through', done => {
-    const stream = shell(['true'])
+  it('passes file through', () =>
+    new Promise(resolve => {
+      const stream = shell(['true'])
 
-    stream.on('data', file => {
-      expect(file).toBe(fakeFile)
-      done()
-    })
+      stream.on('data', file => {
+        expect(file).toBe(fakeFile)
+        resolve()
+      })
 
-    stream.write(fakeFile)
-  })
+      stream.write(fakeFile)
+    }))
 
-  it('executes command after interpolation', done => {
-    const stream = shell([`test <%= file.path %> = ${fakeFile.path}`])
+  it('executes command after interpolation', () =>
+    new Promise(resolve => {
+      const stream = shell([`test <%= file.path %> = ${fakeFile.path}`])
 
-    expectToFlow(stream, done)
+      expectToFlow(stream, resolve)
 
-    stream.write(fakeFile)
-  })
+      stream.write(fakeFile)
+    }))
 
-  it('prepends `./node_modules/.bin` to `PATH`', done => {
-    const stream = shell(
-      [`echo $PATH | grep -q "${join(process.cwd(), 'node_modules/.bin')}"`],
-      { shell: 'bash' }
-    )
+  it('prepends `./node_modules/.bin` to `PATH`', () =>
+    new Promise(resolve => {
+      const stream = shell(
+        [`echo $PATH | grep -q "${join(process.cwd(), 'node_modules/.bin')}"`],
+        { shell: 'bash' }
+      )
 
-    expectToFlow(stream, done)
+      expectToFlow(stream, resolve)
 
-    stream.write(fakeFile)
-  })
+      stream.write(fakeFile)
+    }))
 
   describe('.task(commands, options)', () => {
-    it('returns a function which returns a promise', done => {
-      const task = shell.task(['echo hello world'])
-      const promise = task()
+    it('returns a function which returns a promise', () =>
+      new Promise(resolve => {
+        const task = shell.task(['echo hello world'])
+        const promise = task()
 
-      expect(promise).toBeInstanceOf(Promise)
+        expect(promise).toBeInstanceOf(Promise)
 
-      promise.then(done)
-    })
+        promise.then(resolve)
+      }))
   })
 
   describe('options', () => {
     describe('cwd', () => {
-      it('sets the current working directory when `cwd` is a string', done => {
-        const stream = shell([`test $PWD = ${join(__dirname, '..')}`], {
-          cwd: '..'
-        })
+      it('sets the current working directory when `cwd` is a string', () =>
+        new Promise(resolve => {
+          const stream = shell([`test $PWD = ${join(__dirname, '..')}`], {
+            cwd: '..'
+          })
 
-        expectToFlow(stream, done)
+          expectToFlow(stream, resolve)
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
 
-      it('uses the process current working directory when `cwd` is not passed', done => {
-        const stream = shell([`test $PWD = ${__dirname}`])
+      it('uses the process current working directory when `cwd` is not passed', () =>
+        new Promise(resolve => {
+          const stream = shell([`test $PWD = ${__dirname}`])
 
-        expectToFlow(stream, done)
+          expectToFlow(stream, resolve)
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
     })
 
     describe('shell', () => {
-      it('changes the shell', done => {
-        const stream = shell(['[[ $0 = bash ]]'], { shell: 'bash' })
+      it('changes the shell', () =>
+        new Promise(resolve => {
+          const stream = shell(['[[ $0 = bash ]]'], { shell: 'bash' })
 
-        expectToFlow(stream, done)
+          expectToFlow(stream, resolve)
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
     })
 
     describe('quiet', () => {
-      it("won't output anything when `quiet` == true", done => {
-        const stream = shell(['echo cannot see me!'], { quiet: true })
+      it("won't output anything when `quiet` == true", () =>
+        new Promise(resolve => {
+          const stream = shell(['echo cannot see me!'], { quiet: true })
 
-        expectToFlow(stream, done)
+          expectToFlow(stream, resolve)
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
     })
 
     describe('verbose', () => {
-      it('prints the command', done => {
-        const stream = shell(['echo you can see me twice'], {
-          verbose: true
-        })
+      it('prints the command', () =>
+        new Promise(resolve => {
+          const stream = shell(['echo you can see me twice'], {
+            verbose: true
+          })
 
-        expectToFlow(stream, done)
+          expectToFlow(stream, resolve)
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
     })
 
     describe('ignoreErrors', () => {
-      it('emits error by default', done => {
-        const stream = shell(['false'])
+      it('emits error by default', () =>
+        new Promise(resolve => {
+          const stream = shell(['false'])
 
-        stream.on('error', () => {
-          done()
-        })
+          stream.on('error', error => {
+            expect(error).not.toBeUndefined()
+            resolve()
+          })
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
 
-      it("won't emit error when `ignoreErrors` == true", done => {
-        const stream = shell(['false'], { ignoreErrors: true })
+      it("won't emit error when `ignoreErrors` == true", () =>
+        new Promise((resolve, reject) => {
+          const stream = shell(['false'], { ignoreErrors: true })
 
-        stream.on('error', () => {
-          throw new Error()
-        })
+          stream.on('error', reject)
 
-        stream.on('data', () => {
-          done()
-        })
+          stream.on('data', data => {
+            expect(data).toBe(fakeFile)
+            resolve()
+          })
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
     })
 
     describe('errorMessage', () => {
-      it('allows for custom messages', done => {
-        const errorMessage = 'foo'
-        const stream = shell(['false'], { errorMessage })
+      it('allows for custom messages', () =>
+        new Promise(resolve => {
+          const errorMessage = 'foo'
+          const stream = shell(['false'], { errorMessage })
 
-        stream.on('error', error => {
-          expect(error.message).toBe(errorMessage)
-          done()
-        })
+          stream.on('error', error => {
+            expect(error.message).toBe(errorMessage)
+            resolve()
+          })
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
 
-      it('includes the error object in the error context', done => {
-        const errorMessage = 'Foo <%= error.code %>'
-        const expectedMessage = 'Foo 2'
-        const stream = shell(['exit 2'], { errorMessage })
+      it('includes the error object in the error context', () =>
+        new Promise(resolve => {
+          const errorMessage = 'Foo <%= error.code %>'
+          const expectedMessage = 'Foo 2'
+          const stream = shell(['exit 2'], { errorMessage })
 
-        stream.on('error', error => {
-          expect(error.message).toBe(expectedMessage)
-          done()
-        })
+          stream.on('error', error => {
+            expect(error.message).toBe(expectedMessage)
+            resolve()
+          })
 
-        stream.write(fakeFile)
-      })
+          stream.write(fakeFile)
+        }))
     })
   })
 })
