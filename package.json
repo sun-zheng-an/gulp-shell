@@ -5,7 +5,10 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/index.*"
+    "lib/index.d.ts",
+    "lib/index.d.ts.map",
+    "lib/index.js",
+    "lib/index.js.map"
   ],
   "scripts": {
     "build": "gulp build",

@@ -17,5 +17,5 @@
     "esModuleInterop": true
   },
 
-  "files": ["index.ts"]
+  "include": ["*.ts"]
 }
