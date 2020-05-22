@@ -65,13 +65,14 @@ const runCommand = (
   const context = { file, ...options.templateData }
   command = template(command)(context)
 
+  const cwd = template(options.cwd)(context);
   if (options.verbose) {
-    fancyLog(`${PLUGIN_NAME}:`, chalk.cyan(command))
+    fancyLog(`${PLUGIN_NAME}:`, chalk.cyan(cwd + "$ " + command))
   }
 
   const child = spawn(command, {
     env: options.env,
-    cwd: template(options.cwd)(context),
+    cwd: cwd,
     shell: options.shell,
     stdio: options.quiet ? 'ignore' : 'inherit'
   })
